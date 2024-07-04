@@ -1,7 +1,6 @@
-"use server";
-
-import { login } from "@/lib/lib";
-import { redirect } from "next/navigation";
+'use server';
+import { login } from '@/lib/lib';
+import { redirect } from 'next/navigation';
 
 const navigate = async (formData: FormData) => {
   let loged = false;
@@ -12,13 +11,13 @@ const navigate = async (formData: FormData) => {
       loged = true;
     }
   } catch (error) {
-    console.log("er", error);
+    console.log('er', error);
   }
 
   if (loged) {
-    redirect("/");
+    redirect('/');
   } else {
-    redirect("/login");
+    redirect('/login');
   }
 };
 

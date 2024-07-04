@@ -1,18 +1,18 @@
-"use client";
-import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import axios from "axios";
-import { useToast } from "@/components/ui/use-toast";
-import debounce from "lodash/debounce";
+'use client';
+import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import axios from 'axios';
+import { useToast } from '@/components/ui/use-toast';
+import debounce from 'lodash/debounce';
 
 export default function Page() {
   const { toast } = useToast();
   const [stores, setStores] = useState<Store[]>([]);
   const [form, setForm] = useState<FormState>({
-    productCode: "",
-    name: "",
+    productCode: '',
+    name: '',
     quantity: 0,
-    store: "",
-    item: "",
+    store: '',
+    item: '',
   });
   const [isProductCodeValid, setIsProductCodeValid] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -22,12 +22,12 @@ export default function Page() {
     const fetchStores = async () => {
       setLoading(true);
       try {
-        const response = await axios.get("/api/store");
+        const response = await axios.get('/api/store');
         setStores(response.data.stores);
       } catch (error) {
         toast({
-          title: "Error",
-          description: "Failed to fetch stores",
+          title: 'Error',
+          description: 'Failed to fetch stores',
         });
       } finally {
         setLoading(false);
@@ -43,7 +43,7 @@ export default function Page() {
     const { name, value } = e.target;
     setForm((prevForm) => ({ ...prevForm, [name]: value }));
 
-    if (name === "productCode") {
+    if (name === 'productCode') {
       debouncedHandleProductCodeChange(value);
     }
   };
@@ -64,15 +64,15 @@ export default function Page() {
           }));
           setIsProductCodeValid(true);
         } else {
-          setForm((prevForm) => ({ ...prevForm, name: "" }));
+          setForm((prevForm) => ({ ...prevForm, name: '' }));
           setIsProductCodeValid(false);
         }
       } catch (error) {
-        setForm((prevForm) => ({ ...prevForm, name: "" }));
+        setForm((prevForm) => ({ ...prevForm, name: '' }));
         setIsProductCodeValid(false);
       }
     } else {
-      setForm((prevForm) => ({ ...prevForm, name: "" }));
+      setForm((prevForm) => ({ ...prevForm, name: '' }));
       setIsProductCodeValid(false);
     }
   };
@@ -86,19 +86,19 @@ export default function Page() {
     e.preventDefault();
     if (isProductCodeValid) {
       try {
-        await axios.post("/api/store/addItems", {
+        await axios.post('/api/store/addItems', {
           itemId: form.item,
           storeId: form.store,
           quantity: Number(form.quantity),
         });
         toast({
-          title: "Success",
-          description: "Item added successfully",
+          title: 'Success',
+          description: 'Item added successfully',
         });
       } catch (error) {
         toast({
-          title: "Error",
-          description: "Failed to add item",
+          title: 'Error',
+          description: 'Failed to add item',
         });
       }
     }
@@ -124,7 +124,7 @@ export default function Page() {
               value={form.productCode}
               onChange={handleChange}
               required
-              className={`border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 ${!isProductCodeValid ? "border-red-500" : "focus:ring-red-500"}`}
+              className={`border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 ${!isProductCodeValid ? 'border-red-500' : 'focus:ring-red-500'}`}
               type="text"
             />
             {!isProductCodeValid && (

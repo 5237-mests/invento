@@ -1,8 +1,8 @@
-import itemModel from "@/models/itemModel";
-import itemShopRelation from "@/models/itemShopRelation";
-import shopModel from "@/models/shopModel";
-import connectDB from "@/config/database";
-import { NextResponse } from "next/server";
+import itemModel from '@/models/itemModel';
+import itemShopRelation from '@/models/itemShopRelation';
+import shopModel from '@/models/shopModel';
+import connectDB from '@/config/database';
+import { NextResponse } from 'next/server';
 
 // add items to shop
 // if quantity is less than 0, dispatch items
@@ -41,15 +41,15 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json(
-    { msg: "Relationship created or updated successfully", relationship },
+    { msg: 'Relationship created or updated successfully', relationship },
     { status: 200 },
   );
 }
 
 // get all relationships or get relationship by id
 export async function GET(request: Request) {
-  const searchParams = new URLSearchParams(request.url.split("?")[1]);
-  const id = searchParams.get("id");
+  const searchParams = new URLSearchParams(request.url.split('?')[1]);
+  const id = searchParams.get('id');
   await connectDB();
 
   if (id) {

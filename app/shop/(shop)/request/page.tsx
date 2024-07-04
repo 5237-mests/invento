@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
+import { useState, useEffect, FormEvent } from 'react';
+import axios from 'axios';
 
 interface Item {
   _id: string;
@@ -23,8 +23,8 @@ interface Items {
 export default function RequestComponent() {
   const [items, setItems] = useState<Item[]>([]);
   const [shops, setShops] = useState<Shop[]>([]);
-  const [selectedItem, setSelectedItem] = useState<string>("");
-  const [selectedShop, setSelectedShop] = useState<string>("");
+  const [selectedItem, setSelectedItem] = useState<string>('');
+  const [selectedShop, setSelectedShop] = useState<string>('');
   const [quantity, setQuantity] = useState<number>(0);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -37,22 +37,22 @@ export default function RequestComponent() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get("/api/items"); // Adjust the endpoint if different
+      const response = await axios.get('/api/items'); // Adjust the endpoint if different
       setItems(response.data.items);
       console.log(response.data.items);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching items:", error);
+      console.error('Error fetching items:', error);
     }
   };
 
   const fetchShops = async () => {
     try {
-      const response = await axios.get("/api/shop"); // Adjust the endpoint if different
+      const response = await axios.get('/api/shop'); // Adjust the endpoint if different
       setShops(response.data.shops);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching shops:", error);
+      console.error('Error fetching shops:', error);
     }
   };
 
@@ -60,9 +60,9 @@ export default function RequestComponent() {
     e.preventDefault();
     try {
       const newRequest = { items: [...newlyAddedItem], shop: selectedShop };
-      await axios.post("/api/request", newRequest);
+      await axios.post('/api/request', newRequest);
     } catch (error) {
-      console.error("Error creating request:", error);
+      console.error('Error creating request:', error);
     }
   };
 

@@ -1,59 +1,50 @@
-"use client";
-// const Store = () => {
-//     // want to protect this page for unlogged users and redirect to login page
-//   const user = localStorage.getItem('user')
-//   if (!user) {
-//     window.location.href = '/login'
-//     return
-//   }
+'use client';
+import { useState, useEffect, ChangeEvent } from 'react';
+import axios from 'axios';
 
-//   // user is logged in
-//   // check user is shopkeeper
-//   // this page is only for shopkeeper
-//   // if not shopkeeper or admin redirect to unauthorized page
-//   const data = JSON.parse(user)
-//   if (data.user.role !== 'storekeeper' && data.user.role !== 'admin') {
-//     window.location.href = '/unauthorized'
-//     return
-//   }
-
-//   return <div>Store</div>;
-// };
-// export default Store;
-
-import { useState, useEffect } from "react";
-import axios from "axios";
+interface store {
+  _id: string;
+  storeCode: string;
+  name: string;
+  description: string;
+  location: {
+    street: string;
+    city: string;
+    state: string;
+  };
+  phone: string;
+}
 
 export default function Page() {
-  const [stores, setStores] = useState([]);
+  const [stores, setStores] = useState([{} as store]);
   const [newStore, setNewStore] = useState({
-    storeCode: "",
-    name: "",
-    description: "",
-    street: "",
-    city: "",
-    state: "",
-    phone: "",
+    storeCode: '',
+    name: '',
+    description: '',
+    street: '',
+    city: '',
+    state: '',
+    phone: '',
   });
 
   useEffect(() => {
     async function fetchStores() {
-      const response = await axios.get("/api/store");
+      const response = await axios.get('/api/store');
       setStores(response.data.stores);
     }
 
     fetchStores();
   }, []);
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setNewStore({ ...newStore, [name]: value });
   };
 
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const response = await axios.post("/api/store", {
+      const response = await axios.post('/api/store', {
         storeCode: newStore.storeCode,
         name: newStore.name,
         description: newStore.description,
@@ -66,13 +57,13 @@ export default function Page() {
       });
       setStores([...stores, response.data.stores]);
       setNewStore({
-        storeCode: "",
-        name: "",
-        description: "",
-        street: "",
-        city: "",
-        state: "",
-        phone: "",
+        storeCode: '',
+        name: '',
+        description: '',
+        street: '',
+        city: '',
+        state: '',
+        phone: '',
       });
     } catch (error) {
       console.error(error);
@@ -106,7 +97,9 @@ export default function Page() {
           name="description"
           placeholder="Description"
           value={newStore.description}
-          onChange={handleInputChange}
+          onChange={(e) => {
+            setNewStore({ ...newStore, description: e.target.value });
+          }}
         />
         <input
           type="text"
@@ -145,7 +138,7 @@ export default function Page() {
             <h2>{store.name}</h2>
             <p>{store.description}</p>
             <p>
-              {store.location.street}, {store.location.city},{" "}
+              {store.location.street}, {store.location.city},{' '}
               {store.location.state}
             </p>
             <p>{store.phone}</p>

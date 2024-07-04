@@ -1,9 +1,9 @@
 // create item API
-import connectDB from "@/config/database";
-import itemModel from "@/models/itemModel";
-import itemShopRelation from "@/models/itemShopRelation";
-import itemStoreRelation from "@/models/itemStoreRelation";
-import { NextResponse } from "next/server";
+import connectDB from '@/config/database';
+import itemModel from '@/models/itemModel';
+import itemShopRelation from '@/models/itemShopRelation';
+import itemStoreRelation from '@/models/itemStoreRelation';
+import { NextResponse } from 'next/server';
 
 // create item
 export async function POST(request: Request) {
@@ -29,16 +29,16 @@ export async function POST(request: Request) {
 
 // get all items or get item by id
 export async function GET(request: Request) {
-  const searchParams = new URLSearchParams(request.url.split("?")[1]);
-  const id = searchParams.get("id");
-  const productCode = searchParams.get("productCode");
+  const searchParams = new URLSearchParams(request.url.split('?')[1]);
+  const id = searchParams.get('id');
+  const productCode = searchParams.get('productCode');
   await connectDB();
 
   if (id) {
     const item = await itemModel
       .findById(id)
-      .populate("stores")
-      .populate("shops");
+      .populate('stores')
+      .populate('shops');
 
     // fetch quantity for an item in the shop and store
     const itemQuantity = await itemShopRelation.find({ item: id });
@@ -52,18 +52,18 @@ export async function GET(request: Request) {
     };
 
     if (!item) {
-      return NextResponse.json({ error: "Item not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Item not found' }, { status: 404 });
     }
 
     return NextResponse.json({ item: itemsWithQuantity }, { status: 200 });
   } else if (productCode) {
     const item = await itemModel
       .findOne({ productCode })
-      .populate("stores")
-      .populate("shops");
+      .populate('stores')
+      .populate('shops');
     return NextResponse.json({ data: item }, { status: 200 });
   } else {
-    const items = await itemModel.find().populate("stores").populate("shops");
+    const items = await itemModel.find().populate('stores').populate('shops');
 
     // fetch quantity for an item in the shop and store
     const itemsWithQuantity = await Promise.all(
@@ -89,15 +89,15 @@ export async function GET(request: Request) {
 // update item
 export async function PATCH(request: Request) {
   const body = await request.json();
-  const searchParams = new URLSearchParams(request.url.split("?")[1]);
-  const id = searchParams.get("id");
+  const searchParams = new URLSearchParams(request.url.split('?')[1]);
+  const id = searchParams.get('id');
 
   await connectDB();
 
   // check if item exists
   const item = await itemModel.findById(id);
   if (!item) {
-    return NextResponse.json({ error: "Item not found" }, { status: 404 });
+    return NextResponse.json({ error: 'Item not found' }, { status: 404 });
   }
   const updatedItem = await itemModel.findByIdAndUpdate(id, body, {
     new: true,
@@ -107,8 +107,8 @@ export async function PATCH(request: Request) {
 
 // delete item
 export async function DELETE(request: Request) {
-  const searchParams = new URLSearchParams(request.url.split("?")[1]);
-  const id = searchParams.get("id");
+  const searchParams = new URLSearchParams(request.url.split('?')[1]);
+  const id = searchParams.get('id');
 
   await connectDB();
   const item = await itemModel.findByIdAndDelete(id);

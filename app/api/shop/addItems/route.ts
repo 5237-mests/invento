@@ -57,24 +57,24 @@
 //   return NextResponse.json({ msg: 'Relationship created or updated successfully', relationship }, { status: 200 });
 // }
 
-import itemModel from "@/models/itemModel";
-import shopModel from "@/models/shopModel";
-import itemShopRelation from "@/models/itemShopRelation";
-import connectDB from "@/config/database";
-import { NextResponse } from "next/server";
+import itemModel from '@/models/itemModel';
+import shopModel from '@/models/shopModel';
+import itemShopRelation from '@/models/itemShopRelation';
+import connectDB from '@/config/database';
+import { NextResponse } from 'next/server';
 
 // get all relationships or get relationship by id
 export async function GET(request: Request) {
   try {
-    const searchParams = new URLSearchParams(request.url.split("?")[1]);
-    const id = searchParams.get("id");
+    const searchParams = new URLSearchParams(request.url.split('?')[1]);
+    const id = searchParams.get('id');
     await connectDB();
 
     if (id) {
       const relationship = await itemShopRelation.findById(id);
       if (!relationship) {
         return NextResponse.json(
-          { error: "Relationship not found" },
+          { error: 'Relationship not found' },
           { status: 404 },
         );
       }
@@ -84,9 +84,9 @@ export async function GET(request: Request) {
       return NextResponse.json({ relationships }, { status: 200 });
     }
   } catch (error) {
-    console.error("Error fetching relationships:", error);
+    console.error('Error fetching relationships:', error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: 'Internal server error' },
       { status: 500 },
     );
   }
@@ -101,7 +101,7 @@ export async function POST(request: Request) {
 
     if (!itemId || !shopId || quantity == null) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        { error: 'Missing required fields' },
         { status: 400 },
       );
     }
@@ -139,13 +139,13 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(
-      { msg: "Relationship created or updated successfully", relationship },
+      { msg: 'Relationship created or updated successfully', relationship },
       { status: 200 },
     );
   } catch (error) {
-    console.error("Error creating/updating relationship:", error);
+    console.error('Error creating/updating relationship:', error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: 'Internal server error' },
       { status: 500 },
     );
   }

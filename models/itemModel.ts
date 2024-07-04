@@ -1,4 +1,4 @@
-import { model, Schema, models } from "mongoose";
+import { model, Schema, models } from 'mongoose';
 
 const itemSchema = new Schema(
   {
@@ -27,17 +27,17 @@ const itemSchema = new Schema(
     stores: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Store",
+        ref: 'Store',
       },
     ],
     shops: [
       {
         type: Schema.Types.ObjectId,
-        ref: "Shop",
+        ref: 'Shop',
       },
     ],
   },
   { timestamps: true },
 );
 
-export default models.Item || model("Item", itemSchema);
+export default models.Item || model('Item', itemSchema);

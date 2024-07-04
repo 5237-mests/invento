@@ -42,18 +42,18 @@
 
 // export default models.Request || model("Request", requestSchema);
 
-import { Schema, model, Types, models } from "mongoose";
+import { Schema, model, Types, models } from 'mongoose';
 
 const itemSchema = new Schema({
   item: {
     type: Types.ObjectId,
-    ref: "Item",
+    ref: 'Item',
     required: true,
   },
   quantity: {
     type: Number,
     required: true,
-    min: [1, "Quantity must be a positive number"],
+    min: [1, 'Quantity must be a positive number'],
   },
 });
 
@@ -62,7 +62,7 @@ const requestSchema = new Schema(
     items: [itemSchema], // Array of items with quantity
     shop: {
       type: Types.ObjectId,
-      ref: "Shop",
+      ref: 'Shop',
       required: true,
     },
     approved: {
@@ -71,8 +71,8 @@ const requestSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "approved", "rejected", "completed"],
-      default: "pending",
+      enum: ['pending', 'approved', 'rejected', 'completed'],
+      default: 'pending',
     },
     approvalDate: {
       type: Date,
@@ -84,11 +84,11 @@ const requestSchema = new Schema(
 );
 
 // Update approval date when approved is set to true
-requestSchema.pre("save", function (next) {
-  if (this.isModified("approved") && this.approved) {
+requestSchema.pre('save', function (next) {
+  if (this.isModified('approved') && this.approved) {
     this.approvalDate = new Date();
   }
   next();
 });
 
-export default models.Request || model("Request", requestSchema);
+export default models.Request || model('Request', requestSchema);

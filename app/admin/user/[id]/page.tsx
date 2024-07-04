@@ -1,22 +1,30 @@
-"use client";
-// create dynamic page for user
-import { Metadata } from "next";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
+'use client';
+import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from 'react';
 
+interface user {
+  _id: string;
+  name: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  role: string;
+  password: string;
+  phone: string;
+}
 export default function Page({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const [user, setUser] = useState<any>();
-  const [error, setError] = useState<any>();
+  const [user, setUser] = useState({} as user);
+
   //  want to do crud on User model for admin purpose
   // get user by id
 
   useEffect(() => {
     fetch(`/api/user/?id=${params.id}`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     })
       .then((res) => res.json())
@@ -26,10 +34,10 @@ export default function Page({ params }: { params: { id: string } }) {
 
   // delete user
   const deleteUser = () => {
-    fetch("/api/user", {
-      method: "DELETE",
+    fetch('/api/user', {
+      method: 'DELETE',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ id: params.id }),
     })

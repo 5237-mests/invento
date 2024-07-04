@@ -1,19 +1,19 @@
-"use client";
-import { useState, useEffect, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
+'use client';
+import { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+import axios from 'axios';
 
 export default function Page() {
   const [items, setItems] = useState<Item[]>([]);
   const [filteredItems, setFilteredItems] = useState<Item[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [form, setForm] = useState<FormState>({
-    productCode: "",
-    name: "",
-    price: "",
-    description: "",
-    category: "",
+    productCode: '',
+    name: '',
+    price: '',
+    description: '',
+    category: '',
     storeStock: 0,
-    measurementUnit: "",
+    measurementUnit: '',
   });
 
   useEffect(() => {
@@ -36,11 +36,11 @@ export default function Page() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get("/api/items");
+      const response = await axios.get('/api/items');
       setItems(response.data.items);
       setFilteredItems(response.data.items); // initialize filteredItems
     } catch (error) {
-      console.error("Error fetching items:", error);
+      console.error('Error fetching items:', error);
     }
   };
 
@@ -51,7 +51,7 @@ export default function Page() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     try {
-      await axios.post("/api/items", {
+      await axios.post('/api/items', {
         productCode: form.productCode,
         name: form.name,
         price: form.price,
@@ -73,7 +73,7 @@ export default function Page() {
       //   measurementUnit: ''
       // });
     } catch (error) {
-      console.error("Error creating item:", error);
+      console.error('Error creating item:', error);
     }
   };
 
@@ -90,32 +90,32 @@ export default function Page() {
           className="flex flex-col gap-4 text-slate-900 m-7"
         >
           {[
-            "productCode",
-            "name",
-            "price",
-            "description",
-            "category",
-            "storeStock",
-            "measurementUnit",
+            'productCode',
+            'name',
+            'price',
+            'description',
+            'category',
+            'storeStock',
+            'measurementUnit',
           ].map((field, index) => (
             <div className="flex flex-col gap-1" key={index}>
               <label htmlFor={field} className="text-white">
                 {field
-                  .replace(/([A-Z])/g, " $1")
+                  .replace(/([A-Z])/g, ' $1')
                   .replace(/^./, (str) => str.toUpperCase())}
                 :
               </label>
               <input
                 name={field}
                 placeholder={field
-                  .replace(/([A-Z])/g, " $1")
+                  .replace(/([A-Z])/g, ' $1')
                   .replace(/^./, (str) => str.toUpperCase())}
                 value={form[field as keyof FormState]}
                 onChange={handleChange}
-                required={["productCode", "name", "price"].includes(field)}
+                required={['productCode', 'name', 'price'].includes(field)}
                 className="border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
                 type={
-                  ["price", "storeStock"].includes(field) ? "number" : "text"
+                  ['price', 'storeStock'].includes(field) ? 'number' : 'text'
                 }
               />
             </div>

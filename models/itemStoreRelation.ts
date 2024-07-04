@@ -1,14 +1,14 @@
-import { model, Schema, models } from "mongoose";
+import { model, Schema, models } from 'mongoose';
 
 const itemStoreRelationshipSchema = new Schema({
   item: {
     type: Schema.Types.ObjectId,
-    ref: "Item",
+    ref: 'Item',
     required: true,
   },
   store: {
     type: Schema.Types.ObjectId,
-    ref: "Store",
+    ref: 'Store',
     required: true,
   },
   quantity: {
@@ -18,4 +18,4 @@ const itemStoreRelationshipSchema = new Schema({
 });
 
 export default models.ItemStoreRelationship ||
-  model("ItemStoreRelationship", itemStoreRelationshipSchema);
+  model('ItemStoreRelationship', itemStoreRelationshipSchema);

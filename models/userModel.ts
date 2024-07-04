@@ -1,4 +1,4 @@
-import { model, Schema, models } from "mongoose";
+import { model, Schema, models } from 'mongoose';
 
 // Define user schema
 const userSchema = new Schema(
@@ -32,8 +32,8 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ["admin", "user", "shopkeeper", "storekeeper", "customer"],
-      default: "user",
+      enum: ['admin', 'user', 'shopkeeper', 'storekeeper', 'customer'],
+      default: 'user',
     },
     createdAt: {
       type: Date,
@@ -48,10 +48,10 @@ const userSchema = new Schema(
 );
 
 // Middleware to update the 'updatedAt' field before each update
-userSchema.pre("save", function (next) {
+userSchema.pre('save', function (next) {
   this.updatedAt = new Date(Date.now());
   next();
 });
 
 // Create user model from the schema
-export default models.User || model("User", userSchema);
+export default models.User || model('User', userSchema);

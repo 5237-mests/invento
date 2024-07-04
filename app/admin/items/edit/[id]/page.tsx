@@ -1,17 +1,17 @@
-"use client";
-import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import axios from "axios";
-import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
+'use client';
+import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
+import axios from 'axios';
+import { useToast } from '@/components/ui/use-toast';
+import { useRouter } from 'next/navigation';
 
 export default function Page({ params }: { params: { id: string } }) {
   const [initialForm, setInitialForm] = useState({
-    productCode: "",
-    name: "",
-    price: "",
-    description: "",
-    category: "",
-    measurementUnit: "",
+    productCode: '',
+    name: '',
+    price: '',
+    description: '',
+    category: '',
+    measurementUnit: '',
     shopQuantity: 0,
     storeQuantity: 0,
   });
@@ -39,10 +39,10 @@ export default function Page({ params }: { params: { id: string } }) {
         setLoading(false);
       } catch (error) {
         toast({
-          description: "Error fetching item.",
-          variant: "destructive",
+          description: 'Error fetching item.',
+          variant: 'destructive',
         });
-        router.push("/admin/items"); // Redirect to items page if the item cannot be fetched
+        router.push('/admin/items'); // Redirect to items page if the item cannot be fetched
       }
     };
     fetchItem();
@@ -50,17 +50,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    // if (name === 'storeStock' || name === 'shopStock') {
-    //   setForm({
-    //     ...form,
-    //     stockQuantity: {
-    //       ...form.stockQuantity,
-    //       [name === 'storeStock' ? 'store' : 'shop']: Number(value),
-    //     },
-    //   });
-    // } else {
-    //   setForm({ ...form, [name]: value });
-    // }
+    setForm({ ...form, [name]: value });
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -70,12 +60,12 @@ export default function Page({ params }: { params: { id: string } }) {
     try {
       await axios.patch(`/api/items/?id=${params.id}`, updatedFields);
       toast({
-        description: "Item edited successfully!",
+        description: 'Item edited successfully!',
       });
     } catch (error) {
       toast({
-        description: "Error editing item.",
-        variant: "destructive",
+        description: 'Error editing item.',
+        variant: 'destructive',
       });
     }
   };
@@ -99,30 +89,30 @@ export default function Page({ params }: { params: { id: string } }) {
           className="flex flex-col gap-4 text-slate-900"
         >
           {[
-            "productCode",
-            "name",
-            "price",
-            "description",
-            "category",
-            "measurementUnit",
+            'productCode',
+            'name',
+            'price',
+            'description',
+            'category',
+            'measurementUnit',
           ].map((field, index) => (
             <div className="flex flex-col gap-1" key={index}>
               <label htmlFor={field} className="">
                 {field
-                  .replace(/([A-Z])/g, " $1")
+                  .replace(/([A-Z])/g, ' $1')
                   .replace(/^./, (str) => str.toUpperCase())}
                 :
               </label>
               <input
                 name={field}
                 placeholder={field
-                  .replace(/([A-Z])/g, " $1")
+                  .replace(/([A-Z])/g, ' $1')
                   .replace(/^./, (str) => str.toUpperCase())}
                 value={String(form[field as keyof FormState])}
                 onChange={handleChange}
-                required={["productCode", "name", "price"].includes(field)}
+                required={['productCode', 'name', 'price'].includes(field)}
                 className="border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
-                type={field === "price" ? "number" : "text"}
+                type={field === 'price' ? 'number' : 'text'}
               />
             </div>
           ))}

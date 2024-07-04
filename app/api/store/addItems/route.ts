@@ -1,13 +1,13 @@
-import itemModel from "@/models/itemModel";
-import storeModel from "@/models/storeModel";
-import itemStoreRelation from "@/models/itemStoreRelation";
-import connectDB from "@/config/database";
-import { NextResponse } from "next/server";
+import itemModel from '@/models/itemModel';
+import storeModel from '@/models/storeModel';
+import itemStoreRelation from '@/models/itemStoreRelation';
+import connectDB from '@/config/database';
+import { NextResponse } from 'next/server';
 
 // get all relationships or get relationship by id
 export async function GET(request: Request) {
-  const searchParams = new URLSearchParams(request.url.split("?")[1]);
-  const id = searchParams.get("id");
+  const searchParams = new URLSearchParams(request.url.split('?')[1]);
+  const id = searchParams.get('id');
   await connectDB();
 
   if (id) {
@@ -58,7 +58,7 @@ export async function POST(request: Request) {
   }
 
   return NextResponse.json(
-    { msg: "Relationship created or updated successfully", relationship },
+    { msg: 'Relationship created or updated successfully', relationship },
     { status: 200 },
   );
 }

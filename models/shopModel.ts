@@ -1,4 +1,4 @@
-import { model, Schema, models, Types } from "mongoose";
+import { model, Schema, models, Types } from 'mongoose';
 
 // address schema
 const addressSchema = new Schema({
@@ -39,11 +39,11 @@ const shopSchema = new Schema(
     items: [
       {
         type: Types.ObjectId,
-        ref: "Item",
+        ref: 'Item',
       },
     ],
   },
   { timestamps: true },
 );
 
-export default models.Shop || model("Shop", shopSchema);
+export default models.Shop || model('Shop', shopSchema);

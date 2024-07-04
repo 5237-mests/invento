@@ -1,39 +1,40 @@
-"use client";
-import { useToast } from "@/components/ui/use-toast";
-import React, { useState } from "react";
+'use client';
+import { useToast } from '@/components/ui/use-toast';
+import React, { useState } from 'react';
+import { ChangeEvent } from 'react';
 
 export default function Page() {
   const [user, setUser] = useState({
-    firstName: "",
-    lastName: "",
-    username: "",
-    email: "",
-    password: "",
-    phone: "",
-    role: "",
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    password: '',
+    phone: '',
+    role: '',
   });
 
   const { toast } = useToast();
 
   // error state
   const [error, setError] = useState({
-    firstName: "",
-    lastName: "",
-    username: "",
-    email: "",
-    password: "",
-    phone: "",
-    role: "",
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    password: '',
+    phone: '',
+    role: '',
   });
 
   // write onChange handler
-  const onChange = (e: any) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [e.target.name]: e.target.value });
 
     // reset error
     setError({
       ...error,
-      [e.target.name]: "",
+      [e.target.name]: '',
     });
   };
   const createUser = () => {
@@ -50,24 +51,24 @@ export default function Page() {
     }
     // // create user
     // send to /api/user
-    fetch("/api/user", {
-      method: "POST",
+    fetch('/api/user', {
+      method: 'POST',
       body: JSON.stringify(user),
     })
       .then((res) => res)
       .then((data) => {
         if (data.status == 201) {
           toast({
-            description: "User created successfully",
+            description: 'User created successfully',
           });
         } else if (data.status == 409) {
           data.json().then((data) => {
-            if (data.field == "email") {
+            if (data.field == 'email') {
               setError({
                 ...error,
                 email: data.msg,
               });
-            } else if (data.field == "username") {
+            } else if (data.field == 'username') {
               setError({
                 ...error,
                 username: data.msg,
@@ -76,7 +77,7 @@ export default function Page() {
           });
         } else if (data.status == 400) {
           data.json().then((data) => {
-            if (data.field == "password") {
+            if (data.field == 'password') {
               setError({
                 ...error,
                 password: data.msg,
@@ -223,7 +224,7 @@ export default function Page() {
                   type="radio"
                   id="admin"
                   name="role"
-                  value={"admin"}
+                  value={'admin'}
                   onChange={onChange}
                   required
                 />
@@ -237,7 +238,7 @@ export default function Page() {
                   type="radio"
                   id="storekeeper"
                   name="role"
-                  value={"storekeeper"}
+                  value={'storekeeper'}
                   onChange={onChange}
                   required
                 />
@@ -251,7 +252,7 @@ export default function Page() {
                   type="radio"
                   id="shopkeeper"
                   name="role"
-                  value={"shopkeeper"}
+                  value={'shopkeeper'}
                   onChange={onChange}
                   required
                 />

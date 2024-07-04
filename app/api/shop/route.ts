@@ -1,9 +1,7 @@
-import connectDB from "@/config/database";
-import shopModel from "@/models/shopModel";
-import { NextResponse } from "next/server";
-import mongoose from "mongoose";
-import itemModel from "@/models/itemModel";
-import itemShopRelation from "@/models/itemShopRelation";
+import connectDB from '@/config/database';
+import shopModel from '@/models/shopModel';
+import { NextResponse } from 'next/server';
+import itemShopRelation from '@/models/itemShopRelation';
 
 // Create shop
 export async function POST(request: Request) {
@@ -21,19 +19,19 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   try {
     const searchParams = new URL(request.url).searchParams;
-    const id = searchParams.get("id");
+    const id = searchParams.get('id');
     await connectDB();
 
     if (id) {
-      const shop = await shopModel.findById(id).populate("items");
+      const shop = await shopModel.findById(id).populate('items');
       if (!shop) {
-        return NextResponse.json({ error: "Shop not found" }, { status: 404 });
+        return NextResponse.json({ error: 'Shop not found' }, { status: 404 });
       }
 
       // fetch quantity for an item in the shop
       const itemQuantity = await itemShopRelation
         .find({ shop: id })
-        .populate("item");
+        .populate('item');
       const itemsWithQuantity = itemQuantity.map((relation) => ({
         ...relation.item.toObject(),
         quantity: relation.quantity,
@@ -56,7 +54,7 @@ export async function GET(request: Request) {
     }
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to fetch shops", details: error },
+      { error: 'Failed to fetch shops', details: error },
       { status: 500 },
     );
   }
@@ -67,13 +65,13 @@ export async function PATCH(request: Request) {
   try {
     const body = await request.json();
     const searchParams = new URL(request.url).searchParams;
-    const id = searchParams.get("id");
+    const id = searchParams.get('id');
     await connectDB();
 
     //check if shop exists
     const shop = await shopModel.findById(id);
     if (!shop) {
-      return NextResponse.json({ error: "Shop not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Shop not found' }, { status: 404 });
     }
 
     //update shop
@@ -83,7 +81,7 @@ export async function PATCH(request: Request) {
     return NextResponse.json({ updatedShop }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to update shop", details: error },
+      { error: 'Failed to update shop', details: error },
       { status: 500 },
     );
   }
@@ -93,20 +91,20 @@ export async function PATCH(request: Request) {
 export async function DELETE(request: Request) {
   try {
     const searchParams = new URL(request.url).searchParams;
-    const id = searchParams.get("id");
+    const id = searchParams.get('id');
 
     await connectDB();
     const shop = await shopModel.findByIdAndDelete(id);
     if (!shop) {
-      return NextResponse.json({ error: "Shop not found" }, { status: 404 });
+      return NextResponse.json({ error: 'Shop not found' }, { status: 404 });
     }
     return NextResponse.json(
-      { msg: "Shop deleted successfully", shop },
+      { msg: 'Shop deleted successfully', shop },
       { status: 200 },
     );
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to delete shop", details: error },
+      { error: 'Failed to delete shop', details: error },
       { status: 500 },
     );
   }

@@ -1,5 +1,5 @@
-"use client";
-import User from "@/components/admin/user";
+'use client';
+import User from '@/components/admin/user';
 function Page() {
   return (
     <div className="p-0 m-0">

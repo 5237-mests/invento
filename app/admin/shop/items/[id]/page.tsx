@@ -1,14 +1,14 @@
-"use client";
-import { useState, useEffect, ChangeEvent } from "react";
-import axios from "axios";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
-import debounce from "lodash/debounce";
+'use client';
+import { useState, useEffect, ChangeEvent } from 'react';
+import axios from 'axios';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import debounce from 'lodash/debounce';
 
 export default function Page({ params }: { params: { id: string } }) {
   const [items, setItems] = useState<Item[]>([]);
   const [filteredItems, setFilteredItems] = useState<Item[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const itemsPerPage = 10;
@@ -46,7 +46,7 @@ export default function Page({ params }: { params: { id: string } }) {
       setFilteredItems(response.data.shop.items);
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching items:", error);
+      console.error('Error fetching items:', error);
       setLoading(false);
     }
   };
@@ -139,7 +139,7 @@ export default function Page({ params }: { params: { id: string } }) {
                 <button
                   key={index + 1}
                   onClick={() => handlePageChange(index + 1)}
-                  className={`mx-1 px-3 py-1 border rounded ${currentPage === index + 1 ? "bg-blue-500 text-white" : "bg-white text-black"}`}
+                  className={`mx-1 px-3 py-1 border rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-white text-black'}`}
                 >
                   {index + 1}
                 </button>

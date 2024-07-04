@@ -1,15 +1,15 @@
-"use client";
-import React, { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import navigate from "./action";
+'use client';
+import React, { useState } from 'react';
+// import { useToast } from '@/components/ui/use-toast';
+// import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import navigate from './action';
 export default function Page() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(" ");
-  const { toast } = useToast();
-  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  // const [error, setError] = useState(' ');
+  // const { toast } = useToast();
+  // const router = useRouter();
 
   // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
   //   e.preventDefault()
@@ -101,7 +101,7 @@ export default function Page() {
             />
           </div>
 
-          {error && <div className="text-red-500 text-sm">{error}</div>}
+          {/* {error && <div className="text-red-500 text-sm">{error}</div>} */}
 
           <div>
             <button
@@ -114,7 +114,7 @@ export default function Page() {
 
           <div>
             <p className="text-center">
-              Don&apos;t have an account?{" "}
+              Don&apos;t have an account?{' '}
               <Link
                 href="/registrations"
                 className="text-blue-500 hover:text-blue-700 transition duration-300"

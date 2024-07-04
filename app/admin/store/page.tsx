@@ -1,7 +1,7 @@
-"use client";
-import { useState, useEffect } from "react";
-import axios from "axios";
-import { useRouter } from "next/navigation";
+'use client';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 export default function Page() {
   const router = useRouter();
 
@@ -11,7 +11,7 @@ export default function Page() {
     // fetch stores
     const fetchStores = async () => {
       try {
-        const response = await axios.get("/api/store");
+        const response = await axios.get('/api/store');
         setStores(response.data.stores);
         console.log(response.data.stores);
       } catch (error) {
@@ -26,7 +26,7 @@ export default function Page() {
     <div className="md:ml-5 min-h-screen text-slate-950">
       <div>
         <button
-          onClick={() => router.push("/admin/store/create")}
+          onClick={() => router.push('/admin/store/create')}
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         >
           create store
@@ -36,7 +36,7 @@ export default function Page() {
       <div className="mt-5">
         <h1 className="text-2xl font-bold">List of available Store</h1>
         <div>
-          {stores.map((store: any, index) => (
+          {stores.map((store: storeType, index) => (
             <div key={store._id} className="mt-5">
               <table className="table-responsive w-full">
                 <thead className="">
@@ -53,7 +53,7 @@ export default function Page() {
                     onClick={() =>
                       router.push(`/admin/store/details/${store._id}`)
                     }
-                    key={store.id}
+                    key={store._id}
                     className="text-left py-2 font-bold"
                   >
                     <td className="py-2">{index + 1}</td>
@@ -70,4 +70,15 @@ export default function Page() {
       </div>
     </div>
   );
+}
+
+interface storeType {
+  _id: string;
+  name: string;
+  storeCode: string;
+  location: {
+    street: string;
+    city: string;
+  };
+  phone: string;
 }

@@ -1,19 +1,6 @@
-"use client";
-import { useState, ChangeEvent, FormEvent } from "react";
-import axios from "axios";
-
-interface Store {
-  _id: string;
-  storeCode: string;
-  name: string;
-  description: string;
-  location: {
-    street: string;
-    city: string;
-    state: string;
-  };
-  phone: string;
-}
+'use client';
+import { useState, ChangeEvent, FormEvent } from 'react';
+import axios from 'axios';
 
 interface NewStore {
   storeCode: string;
@@ -27,13 +14,13 @@ interface NewStore {
 
 export default function Page() {
   const [newStore, setNewStore] = useState<NewStore>({
-    storeCode: "",
-    name: "",
-    description: "",
-    street: "",
-    city: "",
-    state: "",
-    phone: "",
+    storeCode: '',
+    name: '',
+    description: '',
+    street: '',
+    city: '',
+    state: '',
+    phone: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -49,7 +36,7 @@ export default function Page() {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("/api/store", {
+      await axios.post('/api/store', {
         storeCode: newStore.storeCode,
         name: newStore.name,
         description: newStore.description,
@@ -61,17 +48,17 @@ export default function Page() {
         phone: newStore.phone,
       });
       setNewStore({
-        storeCode: "",
-        name: "",
-        description: "",
-        street: "",
-        city: "",
-        state: "",
-        phone: "",
+        storeCode: '',
+        name: '',
+        description: '',
+        street: '',
+        city: '',
+        state: '',
+        phone: '',
       });
       setError(null);
     } catch (err) {
-      setError("Failed to add store");
+      setError('Failed to add store');
     } finally {
       setLoading(false);
     }
@@ -85,6 +72,7 @@ export default function Page() {
           onSubmit={handleSubmit}
           className="flex flex-col gap-4 text-slate-950"
         >
+          {error && <div className="text-red-500">{error}</div>}
           <div className="flex flex-col">
             <label htmlFor="storeCode">Store Code: </label>
             <input

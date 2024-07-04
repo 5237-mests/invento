@@ -1,7 +1,7 @@
-"use client";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { request } from "http";
+'use client';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { request } from 'http';
 
 const AdminRequestsPage = () => {
   const [requests, setRequests] = useState([]);
@@ -14,10 +14,10 @@ const AdminRequestsPage = () => {
 
   const fetchRequests = async () => {
     try {
-      const response = await axios.get("/api/request");
+      const response = await axios.get('/api/request');
       setRequests(response.data.req);
     } catch (error) {
-      console.error("Error fetching requests:", error);
+      console.error('Error fetching requests:', error);
     }
   };
 
@@ -26,7 +26,7 @@ const AdminRequestsPage = () => {
       await axios.put(`/api/request/${id}/approve`); // Adjust endpoint for approval
       fetchRequests(); // Refresh requests after update
     } catch (error) {
-      console.error("Error approving request:", error);
+      console.error('Error approving request:', error);
     }
   };
 
@@ -35,7 +35,7 @@ const AdminRequestsPage = () => {
       await axios.put(`/api/admin/requests/${id}/reject`); // Adjust endpoint for rejection
       fetchRequests(); // Refresh requests after update
     } catch (error) {
-      console.error("Error rejecting request:", error);
+      console.error('Error rejecting request:', error);
     }
   };
 
@@ -65,7 +65,7 @@ const AdminRequestsPage = () => {
                   <td>{request.item.name}</td>
                   <td>{request.quantity}</td>
                   <td>{request.status}</td>
-                  <td>{request.approved ? "Yes" : "No"}</td>
+                  <td>{request.approved ? 'Yes' : 'No'}</td>
                   <td>
                     <button
                       onClick={() => handleApproveRequest(request._id)}

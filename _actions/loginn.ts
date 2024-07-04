@@ -1,5 +1,5 @@
-"use server";
-import { login } from "@/lib/lib";
+'use server';
+import { login } from '@/lib/lib';
 
 const loginn = async (formData: FormData) => {
   try {

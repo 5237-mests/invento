@@ -1,17 +1,28 @@
-"use client";
+'use client';
 // create dynamic page for user
-import { useRouter } from "next/navigation";
-import React, { useState, useEffect } from "react";
+import { useRouter } from 'next/navigation';
+import React, { useState, useEffect, ChangeEvent } from 'react';
 
 type UpdatedField = {
   [key: string]: boolean;
 };
 
-type User = {
-  [key: string]: string | number;
-};
+// type User = {
+//   [key: string]: string | number;
+// };
+
+interface user {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  password: string;
+  phone: string;
+  role: string;
+}
 export default function Page({ params }: { params: { id: string } }) {
-  const [user, setUser] = useState<any>();
+  const [user, setUser] = useState({} as user);
 
   const router = useRouter();
 
@@ -24,23 +35,23 @@ export default function Page({ params }: { params: { id: string } }) {
     phone: false,
     role: false,
   });
-  const [error, setError] = useState<any>({
-    firstName: "",
-    lastName: "",
-    username: "",
-    email: "",
-    password: "",
-    phone: "",
-    role: "",
+  const [error, setError] = useState({
+    firstName: '',
+    lastName: '',
+    username: '',
+    email: '',
+    password: '',
+    phone: '',
+    role: '',
   });
   //  want to do crud on User model for admin purpose
   // get user by id
 
   useEffect(() => {
     fetch(`/api/user/?id=${params.id}`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     })
       .then((res) => res.json())
@@ -50,10 +61,10 @@ export default function Page({ params }: { params: { id: string } }) {
 
   // delete user
   const deleteUser = () => {
-    fetch("/api/user", {
-      method: "DELETE",
+    fetch('/api/user', {
+      method: 'DELETE',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ id: params.id }),
     })
@@ -63,7 +74,7 @@ export default function Page({ params }: { params: { id: string } }) {
 
   // update user
   const updateUser = () => {
-    const updatedUser: User = {
+    const updatedUser = {
       firstName: user.firstName,
       lastName: user.lastName,
       username: user.username,
@@ -74,26 +85,26 @@ export default function Page({ params }: { params: { id: string } }) {
     };
 
     // filter updated field
-    Object.keys(updatedUser).forEach((key) => {
-      if (!updatedField[key]) {
-        delete updatedUser[key];
-      }
-    });
+    // Object.keys(updatedUser).forEach((key) => {
+    //   if (!updatedField[key]) {
+    //     delete updatedUser[key];
+    //   }
+    // });
 
     fetch(`/api/user/?id=${params.id}`, {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify(updatedUser),
     })
       .then((data) => {
         if (data.status === 200) {
-          router.push("/admin/user/" + params.id);
+          router.push('/admin/user/' + params.id);
         } else if (data.status === 400) {
           data.json().then((data) => {
             console.log(data);
-            if (data.field === "password") {
+            if (data.field === 'password') {
               setError({ ...error, password: data.msg });
             }
           });
@@ -102,13 +113,13 @@ export default function Page({ params }: { params: { id: string } }) {
       .catch((err) => console.log(err));
   };
 
-  const onChange = (e: any) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [e.target.name]: e.target.value });
     setUpdatedField({ ...updatedField, [e.target.name]: true });
-    setError({ ...error, [e.target.name]: "" });
+    setError({ ...error, [e.target.name]: '' });
   };
 
-  const role = ["admin", "user", "shopkeeper", "storekeeper"];
+  const role = ['admin', 'user', 'shopkeeper', 'storekeeper'];
 
   return (
     <div className="m-3 p-3">
@@ -205,7 +216,7 @@ export default function Page({ params }: { params: { id: string } }) {
               <select
                 name="role"
                 id="role"
-                onChange={onChange}
+                onChange={(e) => setUser({ ...user, role: e.target.value })}
                 className="mb-1 p-2 border-2 border-slate-350 rounded focus:outline-slate-400"
               >
                 <option value="user">{user && user.role}</option>

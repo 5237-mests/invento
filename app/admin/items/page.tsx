@@ -329,16 +329,16 @@
 //   measurementUnit: string;
 // }
 
-"use client";
-import { useState, useEffect, ChangeEvent } from "react";
-import axios from "axios";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+'use client';
+import { useState, useEffect, ChangeEvent } from 'react';
+import axios from 'axios';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 export default function Page() {
   const [items, setItems] = useState<Item[]>([]);
   const [filteredItems, setFilteredItems] = useState<Item[]>([]);
-  const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
   const [searched, setSearched] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
@@ -379,12 +379,12 @@ export default function Page() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get("/api/items");
+      const response = await axios.get('/api/items');
       setItems(response.data.items);
       setFilteredItems(response.data.items); // initialize filteredItems
       setLoading(false);
     } catch (error) {
-      console.error("Error fetching items:", error);
+      console.error('Error fetching items:', error);
       setLoading(false);
     }
   };
@@ -493,7 +493,7 @@ export default function Page() {
                 <button
                   key={index + 1}
                   onClick={() => handlePageChange(index + 1)}
-                  className={`mx-1 px-3 py-1 border rounded ${currentPage === index + 1 ? "bg-blue-500 text-white" : "bg-white text-black"}`}
+                  className={`mx-1 px-3 py-1 border rounded ${currentPage === index + 1 ? 'bg-blue-500 text-white' : 'bg-white text-black'}`}
                 >
                   {index + 1}
                 </button>

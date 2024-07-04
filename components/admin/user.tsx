@@ -1,10 +1,21 @@
-import Link from "next/link";
-import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import Link from 'next/link';
+import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+
+interface userType {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  username: string;
+  email: string;
+  password: string;
+  phone: string;
+  role: string;
+}
 
 function User() {
   const router = useRouter();
-  const [users, setusers] = useState<any>();
+  const [users, setusers] = useState([{} as userType]);
   //  want to do crud on User model for admin purpose
   //  get all users
   //  delete user
@@ -12,10 +23,10 @@ function User() {
   //  create user
 
   const getAllUsers = () => {
-    fetch("/api/user", {
-      method: "GET",
+    fetch('/api/user', {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     })
       .then((res) => res.json())
@@ -23,11 +34,11 @@ function User() {
       .catch((err) => console.log(err));
   };
 
-  const deleteUser = (id: any) => {
-    fetch("/api/user", {
-      method: "DELETE",
+  const deleteUser = (id: string) => {
+    fetch('/api/user', {
+      method: 'DELETE',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({ id }),
     })
@@ -69,7 +80,7 @@ function User() {
           </thead>
           <tbody className="text-centerr">
             {users &&
-              users.map((user: any) => (
+              users.map((user) => (
                 <tr key={user._id} className="hover:bg-blue-100">
                   <td onClick={() => router.push(`/admin/user/${user._id}`)}>
                     {user.firstName} {user.lastName}

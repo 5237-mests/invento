@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import Image from "next/image";
-import sidePic from "@/public/hamburgor.png";
+import Link from 'next/link';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import Image from 'next/image';
+import sidePic from '@/public/hamburgor.png';
 
 function SideBar() {
   return (
@@ -16,7 +16,7 @@ function SideBar() {
             className="text-white"
           />
         </SheetTrigger>
-        <SheetContent className="bg-slate-800 w-[300px]" side={"left"}>
+        <SheetContent className="bg-slate-800 w-[300px]" side={'left'}>
           <div className="bg-slate-800 mobile-sidebar text-white">
             <div className="flex flex-col h-full">
               <div className="p-4">

@@ -1,8 +1,8 @@
-"use server";
+'use server';
 
-import UserModel from "@/models/userModel";
-import connectDB from "@/config/database";
-import { NextResponse } from "next/server";
+import UserModel from '@/models/userModel';
+import connectDB from '@/config/database';
+import { NextResponse } from 'next/server';
 
 export async function POST(request: Request) {
   const { firstName, lastName, username, email, password } =
@@ -16,5 +16,5 @@ export async function POST(request: Request) {
   });
   await connectDB();
   await user.save();
-  return NextResponse.json({ msg: "success POST" });
+  return NextResponse.json({ msg: 'success POST' });
 }

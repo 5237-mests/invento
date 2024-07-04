@@ -1,15 +1,15 @@
 // item shop relation model
-import { Schema, model, Types, models } from "mongoose";
+import { Schema, model, Types, models } from 'mongoose';
 
 const itemShopRelationshipSchema = new Schema({
   item: {
     type: Types.ObjectId,
-    ref: "Item",
+    ref: 'Item',
     required: true,
   },
   shop: {
     type: Types.ObjectId,
-    ref: "Shop",
+    ref: 'Shop',
     required: true,
   },
   quantity: {
@@ -19,4 +19,4 @@ const itemShopRelationshipSchema = new Schema({
 });
 
 export default models.ItemShopRelationship ||
-  model("ItemShopRelationship", itemShopRelationshipSchema);
+  model('ItemShopRelationship', itemShopRelationshipSchema);

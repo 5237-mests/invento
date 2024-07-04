@@ -1,8 +1,8 @@
-"use client";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
+'use client';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 interface shop {
   _id: string;
@@ -37,7 +37,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const deleteshop = async () => {
     try {
       await axios.delete(`/api/shop/?id=${shop._id}`);
-      router.push("/admin/shop");
+      router.push('/admin/shop');
     } catch (error) {
       console.log(error);
     }
@@ -102,9 +102,9 @@ export default function Page({ params }: { params: { id: string } }) {
                 type="text"
                 value={
                   shop.location?.street +
-                  ", " +
+                  ', ' +
                   shop.location?.city +
-                  ", " +
+                  ', ' +
                   shop.location?.state
                 }
                 disabled

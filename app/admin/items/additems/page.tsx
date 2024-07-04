@@ -1,13 +1,13 @@
-"use client";
-import { useState, ChangeEvent, FormEvent, useEffect } from "react";
-import axios from "axios";
-import { useToast } from "@/components/ui/use-toast";
+'use client';
+import { useState, ChangeEvent, FormEvent } from 'react';
+import axios from 'axios';
+import { useToast } from '@/components/ui/use-toast';
 
 export default function Page() {
   const { toast } = useToast();
   const [form, setForm] = useState<FormState>({
-    productCode: "",
-    name: "",
+    productCode: '',
+    name: '',
     storeStock: 0,
   });
   const [isProductCodeValid, setIsProductCodeValid] = useState(true);
@@ -16,7 +16,7 @@ export default function Page() {
     const { name, value } = e.target;
     setForm({ ...form, [name]: value });
 
-    if (name === "productCode") {
+    if (name === 'productCode') {
       handleProductCodeChange(value);
     }
   };
@@ -39,22 +39,22 @@ export default function Page() {
         } else {
           setForm((prevForm) => ({
             ...prevForm,
-            name: "",
+            name: '',
           }));
           setIsProductCodeValid(false);
         }
       } catch (error) {
-        console.error("Error fetching item:", error);
+        console.error('Error fetching item:', error);
         setForm((prevForm) => ({
           ...prevForm,
-          name: "",
+          name: '',
         }));
         setIsProductCodeValid(false);
       }
     } else {
       setForm((prevForm) => ({
         ...prevForm,
-        name: "",
+        name: '',
       }));
       setIsProductCodeValid(false);
     }
@@ -64,7 +64,7 @@ export default function Page() {
     e.preventDefault();
     if (!isProductCodeValid) {
       toast({
-        description: "Invalid product code.",
+        description: 'Invalid product code.',
       });
       return;
     }
@@ -78,17 +78,17 @@ export default function Page() {
         },
       });
       toast({
-        description: "Item added to store successfully!",
+        description: 'Item added to store successfully!',
       });
       setForm({
-        productCode: "",
-        name: "",
+        productCode: '',
+        name: '',
         storeStock: 0,
       });
     } catch (error) {
-      console.error("Error adding an item:", error);
+      console.error('Error adding an item:', error);
       toast({
-        description: "Failed to add item to the store.",
+        description: 'Failed to add item to the store.',
       });
     }
   };
@@ -119,7 +119,7 @@ export default function Page() {
               value={form.productCode}
               onChange={handleChange}
               required
-              className={`border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 ${!isProductCodeValid ? "border-red-500" : "focus:ring-red-500"}`}
+              className={`border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 ${!isProductCodeValid ? 'border-red-500' : 'focus:ring-red-500'}`}
               type="text"
             />
             {!isProductCodeValid && (

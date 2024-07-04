@@ -1,8 +1,8 @@
 // create usermodel
-import UserModel from "@/models/userModel";
-import connectDB from "@/config/database";
-import { NextResponse } from "next/server";
-import bcrypt from "bcrypt";
+import UserModel from '@/models/userModel';
+import connectDB from '@/config/database';
+import { NextResponse } from 'next/server';
+import bcrypt from 'bcrypt';
 
 //registration of user
 export async function POST(request: Request) {
@@ -10,12 +10,12 @@ export async function POST(request: Request) {
     await request.json();
 
   if (!firstName || !lastName || !username || !email || !password || !phone) {
-    return NextResponse.json({ msg: "Missing fields" }, { status: 400 });
+    return NextResponse.json({ msg: 'Missing fields' }, { status: 400 });
   }
 
   if (password.length < 6) {
     return NextResponse.json(
-      { msg: "Password must be at least 6 characters", field: "password" },
+      { msg: 'Password must be at least 6 characters', field: 'password' },
       { status: 400 },
     );
   }
@@ -27,7 +27,7 @@ export async function POST(request: Request) {
   const emailExists = await UserModel.findOne({ email });
   if (emailExists) {
     return NextResponse.json(
-      { msg: "Email already registered", field: "email" },
+      { msg: 'Email already registered', field: 'email' },
       { status: 409 },
     );
   }
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
   const usernameExists = await UserModel.findOne({ username });
   if (usernameExists) {
     return NextResponse.json(
-      { msg: "Username already registered", field: "username" },
+      { msg: 'Username already registered', field: 'username' },
       { status: 409 },
     );
   }
@@ -56,31 +56,31 @@ export async function POST(request: Request) {
   });
   await user.save();
   return NextResponse.json(
-    { msg: "User created successfully", user },
+    { msg: 'User created successfully', user },
     { status: 201 },
   );
 }
 
 // get user by id
 export async function GET(request: Request) {
-  const searchParams = new URLSearchParams(request.url.split("?")[1]);
-  const id = searchParams.get("id");
+  const searchParams = new URLSearchParams(request.url.split('?')[1]);
+  const id = searchParams.get('id');
 
   await connectDB();
 
   if (id) {
     const user = await UserModel.findById(id);
     if (!user) {
-      return NextResponse.json({ msg: "User not found" }, { status: 404 });
+      return NextResponse.json({ msg: 'User not found' }, { status: 404 });
     }
     return NextResponse.json(
-      { msg: "successfully retrieved user", user },
+      { msg: 'successfully retrieved user', user },
       { status: 200 },
     );
   } else {
     const users = await UserModel.find();
     return NextResponse.json(
-      { msg: "successfully retrieved all users", total: users.length, users },
+      { msg: 'successfully retrieved all users', total: users.length, users },
       { status: 200 },
     );
   }
@@ -97,7 +97,7 @@ export async function DELETE(request: Request) {
   await connectDB();
   const user = await UserModel.findByIdAndDelete(id);
   return NextResponse.json(
-    { msg: "User deleted successfully", user },
+    { msg: 'User deleted successfully', user },
     { status: 200 },
   );
 }
@@ -105,8 +105,8 @@ export async function DELETE(request: Request) {
 // update user
 // take id from params and update user
 export async function PATCH(request: Request) {
-  const searchParams = new URLSearchParams(request.url.split("?")[1]);
-  const id = searchParams.get("id");
+  const searchParams = new URLSearchParams(request.url.split('?')[1]);
+  const id = searchParams.get('id');
 
   const body = await request.json();
 
@@ -115,7 +115,7 @@ export async function PATCH(request: Request) {
   if (body.password) {
     if (body.password.length < 6) {
       return NextResponse.json(
-        { msg: "Password must be at least 6 characters", field: "password" },
+        { msg: 'Password must be at least 6 characters', field: 'password' },
         { status: 400 },
       );
     }
@@ -126,7 +126,7 @@ export async function PATCH(request: Request) {
 
   const user = await UserModel.findByIdAndUpdate(id, body, { new: true });
   return NextResponse.json(
-    { msg: "User updated successfully", user },
+    { msg: 'User updated successfully', user },
     { status: 200 },
   );
 }

@@ -1,8 +1,8 @@
 // cretae store edit page
-"use client";
-import { useEffect, useState } from "react";
-import axios from "axios";
-import { useRouter } from "next/navigation";
+'use client';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 interface Store {
   _id: string;
@@ -39,7 +39,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFieldUpdated(true);
     const { name, value } = e.target;
-    if (name === "street" || name === "city" || name === "state") {
+    if (name === 'street' || name === 'city' || name === 'state') {
       setUpdatedStore({
         ...updatedStore,
         location: { ...updatedStore.location, [name]: value },
@@ -52,7 +52,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const deleteStore = async () => {
     try {
       await axios.delete(`/api/store/?id=${store._id}`);
-      router.push("/admin/store");
+      router.push('/admin/store');
     } catch (error) {
       console.log(error);
     }
@@ -76,7 +76,7 @@ export default function Page({ params }: { params: { id: string } }) {
       <h1 className="text-2xl font-bold mb-5">Edit store</h1>
       <div className="flex justify-end gap-3">
         <button
-          onClick={() => router.push("/admin/store")}
+          onClick={() => router.push('/admin/store')}
           className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
         >
           Cancel
