@@ -1,19 +1,29 @@
 import { redirect } from 'next/navigation';
 import { getSession } from '@/lib/lib';
+import { JWTPayload } from 'jose';
 
 export default async function Page() {
-  const session = await getSession();
+  const session: JWTPayload | null = await getSession();
+
+  // Check if the user is logged in
   if (!session) {
     redirect('/login');
+    return;
   }
-  // user is logged in
-  if (session.user.role === 'admin') {
-    redirect('/admin');
-  } else if (session.user.role === 'storekeeper') {
-    redirect('/storekeeper');
-  } else if (session.user.role === 'shopkeeper') {
-    redirect('/shopkeeper');
-  } else {
-    redirect('/unauthorized');
+
+  // Redirect based on the user's role
+  switch ((session.user as { role: string }).role) {
+    case 'admin':
+      redirect('/admin');
+      break;
+    case 'storekeeper':
+      redirect('/storekeeper');
+      break;
+    case 'shopkeeper':
+      redirect('/shopkeeper');
+      break;
+    default:
+      redirect('/unauthorized');
+      break;
   }
 }

@@ -63,7 +63,7 @@ export async function GET(request: Request) {
       .populate('shops');
     return NextResponse.json({ data: item }, { status: 200 });
   } else {
-    const items = await itemModel.find().populate('stores').populate('shops');
+    const items = await itemModel.find({}).populate('stores').populate('shops');
 
     // fetch quantity for an item in the shop and store
     const itemsWithQuantity = await Promise.all(
@@ -82,7 +82,7 @@ export async function GET(request: Request) {
 
     // send item quantity with item response
     return NextResponse.json({ items: itemsWithQuantity }, { status: 200 });
-    // return NextResponse.json({ data: items }, { status: 200 });
+    // return NextResponse.json({ items: items }, { status: 200 });
   }
 }
 
