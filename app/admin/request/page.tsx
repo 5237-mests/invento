@@ -10,8 +10,6 @@ const AdminRequestsPage = () => {
     fetchRequests();
   }, []);
 
-  console.log(requests);
-
   const fetchRequests = async () => {
     try {
       const response = await axios.get('/api/request');

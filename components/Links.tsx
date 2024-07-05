@@ -4,7 +4,9 @@ import { usePathname } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
 function Links() {
-  const [urls, setUrls] = useState([]);
+  // const [urls, setUrls] = useState();
+  const [urls, setUrls] = useState<string[]>([]);
+
   const pathname = usePathname();
 
   useEffect(() => {
@@ -16,7 +18,7 @@ function Links() {
 
   return (
     <div className="flex gap-2 p-2">
-      {urls.map((url, index) => (
+      {urls?.map((url, index) => (
         <React.Fragment key={url}>
           {index > 0 && <span>/</span>}
           <Link
