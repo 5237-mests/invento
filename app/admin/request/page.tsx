@@ -1,10 +1,12 @@
 'use client';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { request } from 'http';
+import { useRouter } from 'next/navigation';
 
 const AdminRequestsPage = () => {
   const [requests, setRequests] = useState([]);
+
+  const router = useRouter();
 
   useEffect(() => {
     fetchRequests();
@@ -13,7 +15,7 @@ const AdminRequestsPage = () => {
   const fetchRequests = async () => {
     try {
       const response = await axios.get('/api/request');
-      setRequests(response.data.req);
+      setRequests(response.data.reqs);
     } catch (error) {
       console.error('Error fetching requests:', error);
     }
@@ -48,8 +50,6 @@ const AdminRequestsPage = () => {
             <thead>
               <tr className="text-left font-bold bg-slate-300">
                 <th className="p-2">Shop Name</th>
-                <th>Item</th>
-                <th>Quantity</th>
                 <th>Status</th>
                 <th>Aproved</th>
                 <th>Action</th>
@@ -58,23 +58,34 @@ const AdminRequestsPage = () => {
             </thead>
             <tbody>
               {requests.map((request: request) => (
-                <tr key={request._id}>
+                <tr
+                  key={request._id}
+                  className="border-b border-slate-300"
+                  data-state={request.approved ? 'selected' : ''}
+                  onClick={() => router.push(`/admin/request/${request._id}`)}
+                >
                   <td className="p-2">{request.shop.name}</td>
-                  <td>{request.item.name}</td>
-                  <td>{request.quantity}</td>
                   <td>{request.status}</td>
                   <td>{request.approved ? 'Yes' : 'No'}</td>
                   <td>
                     <button
+                      disabled={request.approved}
                       onClick={() => handleApproveRequest(request._id)}
-                      className="bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded"
+                      className={`bg-blue-500 hover:bg-blue-700 text-white font-bold p-2 rounded ${
+                        request.approved ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
                     >
                       Approve
                     </button>
                   </td>
                   <td>
                     <button
-                      className="bg-red-500 hover:bg-red-700 text-white font-bold p-2 rounded"
+                      disabled={request.status === 'cancelled'}
+                      className={`bg-red-500 hover:bg-red-700 text-white font-bold p-2 rounded ${
+                        request.status === 'cancelled'
+                          ? 'opacity-50 cursor-not-allowed'
+                          : ''
+                      }`}
                       onClick={() => handleRejectRequest(request._id)}
                     >
                       Reject
@@ -97,11 +108,13 @@ interface request {
   quantity: number;
   approved: boolean;
   status: string;
-  item: {
-    _id: string;
-    name: string;
-    productCode: string;
-  };
+  items: [
+    {
+      _id: string;
+      item: string;
+      quantity: number;
+    },
+  ];
   shop: {
     _id: string;
     name: string;
