@@ -41,6 +41,10 @@ function SideBar() {
                   <Link href="/admin/shop">
                     <li className={`p-2 hover:underline`}>Shop</li>
                   </Link>
+
+                  <Link href="/admin/request">
+                    <li className={`p-2 hover:underline`}>Request</li>
+                  </Link>
                 </ul>
               </div>
               <div className="mt-auto p-4">
