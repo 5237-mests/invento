@@ -17,7 +17,7 @@ export default async function Page() {
       redirect('/admin');
       break;
     case 'storekeeper':
-      redirect('/storekeeper');
+      redirect('/store');
       break;
     case 'shopkeeper':
       redirect('/shopkeeper');

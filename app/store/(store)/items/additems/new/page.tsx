@@ -10,7 +10,6 @@ export default function Page() {
     price: '',
     description: '',
     category: '',
-    storeStock: 0,
     measurementUnit: '',
   });
 
@@ -29,9 +28,6 @@ export default function Page() {
         price: form.price,
         description: form.description,
         category: form.category,
-        stockQuantity: {
-          store: form.storeStock,
-        },
         measurementUnit: form.measurementUnit,
       });
       toast({
@@ -43,7 +39,6 @@ export default function Page() {
         price: '',
         description: '',
         category: '',
-        storeStock: 0,
         measurementUnit: '',
       });
     } catch (error) {
@@ -57,9 +52,7 @@ export default function Page() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center text-slate-950 mb-5">
-      <h1 className="md:text-3xl text-2xl font-bold">
-        Add new items to store.
-      </h1>
+      <h1 className="md:text-3xl text-2xl font-bold">Add item to store.</h1>
       <div className="w-11/12 md:w-9/12">
         <form
           onSubmit={handleSubmit}
@@ -71,7 +64,6 @@ export default function Page() {
             'price',
             'description',
             'category',
-            'storeStock',
             'measurementUnit',
           ].map((field, index) => (
             <div className="flex flex-col gap-1" key={index}>
@@ -90,9 +82,7 @@ export default function Page() {
                 onChange={handleChange}
                 required={['productCode', 'name', 'price'].includes(field)}
                 className="border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
-                type={
-                  ['price', 'storeStock'].includes(field) ? 'number' : 'text'
-                }
+                type={['price'].includes(field) ? 'number' : 'text'}
               />
             </div>
           ))}
@@ -114,6 +104,5 @@ interface FormState {
   price: string;
   description: string;
   category: string;
-  storeStock: number;
   measurementUnit: string;
 }

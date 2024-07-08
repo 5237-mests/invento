@@ -71,7 +71,7 @@ const requestSchema = new Schema(
     },
     status: {
       type: String,
-      enum: ['pending', 'approved', 'rejected', 'completed'],
+      enum: ['pending', 'approved', 'cancelled', 'completed'],
       default: 'pending',
     },
     approvalDate: {
