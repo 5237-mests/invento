@@ -3,6 +3,8 @@ import UserModel from '@/models/userModel';
 import connectDB from '@/config/database';
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
+import { getSession } from '@/lib/lib';
+import { JWTPayload } from 'jose';
 
 //registration of user
 export async function POST(request: Request) {
@@ -63,6 +65,15 @@ export async function POST(request: Request) {
 
 // get user by id
 export async function GET(request: Request) {
+  // check user signed in and it is admin role
+  // if not admin, return error
+  const session: JWTPayload | null = await getSession();
+  if (!session) {
+    return NextResponse.json({ msg: 'Unauthorized' }, { status: 401 });
+  }
+  if ((session.user as { role: string }).role !== 'admin') {
+    return NextResponse.json({ msg: 'Unauthorized' }, { status: 401 });
+  }
   const searchParams = new URLSearchParams(request.url.split('?')[1]);
   const id = searchParams.get('id');
 

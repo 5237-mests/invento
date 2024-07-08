@@ -41,11 +41,12 @@ export async function login(formData: FormData) {
   }
 
   // Create the session
-  const expires = new Date(Date.now() + 30 * 1000);
+  const expires = new Date(Date.now() + 3000 * 1000);
   const session = await encrypt({ user, expires });
 
   // Save the session in a cookie
   cookies().set('session', session, { expires, httpOnly: true });
+  cookies().set('role', user.role, { expires, httpOnly: true });
   return true;
 }
 

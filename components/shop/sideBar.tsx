@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import Image from 'next/image';
 import sidePic from '@/public/hamburgor.png';
+import logout from '@/lib/logout';
 
 function SideBar() {
   return (
@@ -36,7 +37,10 @@ function SideBar() {
                 </ul>
               </div>
               <div className="mt-auto p-4">
-                <button className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                <button
+                  onClick={logout}
+                  className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                >
                   Logout
                 </button>
               </div>

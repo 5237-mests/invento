@@ -8,7 +8,6 @@ export default async function Page() {
   // Check if the user is logged in
   if (!session) {
     redirect('/login');
-    return;
   }
 
   // Redirect based on the user's role
@@ -20,7 +19,7 @@ export default async function Page() {
       redirect('/store');
       break;
     case 'shopkeeper':
-      redirect('/shopkeeper');
+      redirect('/shop');
       break;
     default:
       redirect('/unauthorized');
