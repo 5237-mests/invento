@@ -3,12 +3,18 @@ import itemModel from '@/models/itemModel';
 import itemShopRelation from '@/models/itemShopRelation';
 import itemStoreRelation from '@/models/itemStoreRelation';
 import { NextResponse } from 'next/server';
+import { checkAdmin, checkShopkeeper } from '@/lib/authMiddleWare';
 
 // Connect to the database once
 connectDB();
 
 // Create item
 export async function POST(request: Request) {
+  const isAdmin = checkAdmin();
+  const isStorekeeper = checkShopkeeper();
+  if (!isAdmin && !isStorekeeper)
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   try {
     const body = await request.json();
     const item = await itemModel.create(body);
@@ -23,6 +29,10 @@ export async function POST(request: Request) {
 
 // Get item(s)
 export async function GET(request: Request) {
+  const isAdmin = checkAdmin();
+  if (!isAdmin)
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
   try {
     const searchParams = new URLSearchParams(request.url.split('?')[1]);
     const id = searchParams.get('id');
@@ -91,6 +101,9 @@ export async function GET(request: Request) {
 
 // Update item
 export async function PATCH(request: Request) {
+  const isAdmin = checkAdmin();
+  if (isAdmin) return isAdmin;
+
   try {
     const body = await request.json();
     const searchParams = new URLSearchParams(request.url.split('?')[1]);
@@ -122,6 +135,9 @@ export async function PATCH(request: Request) {
 
 // Delete item
 export async function DELETE(request: Request) {
+  const isAdmin = checkAdmin();
+  if (isAdmin) return isAdmin;
+
   try {
     const searchParams = new URLSearchParams(request.url.split('?')[1]);
     const id = searchParams.get('id');

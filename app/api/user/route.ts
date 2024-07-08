@@ -1,143 +1,164 @@
-// create usermodel
-import UserModel from '@/models/userModel';
-import connectDB from '@/config/database';
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcrypt';
-import { getSession } from '@/lib/lib';
-import { JWTPayload } from 'jose';
+import connectDB from '@/config/database';
+import UserModel from '@/models/userModel';
+import { cookies } from 'next/headers';
 
-//registration of user
+// Create a new user
 export async function POST(request: Request) {
-  const { firstName, lastName, username, email, password, phone, role } =
-    await request.json();
+  try {
+    const { firstName, lastName, username, email, password, phone, role } =
+      await request.json();
 
-  if (!firstName || !lastName || !username || !email || !password || !phone) {
-    return NextResponse.json({ msg: 'Missing fields' }, { status: 400 });
-  }
-
-  if (password.length < 6) {
-    return NextResponse.json(
-      { msg: 'Password must be at least 6 characters', field: 'password' },
-      { status: 400 },
-    );
-  }
-
-  // connect to db
-  await connectDB();
-
-  // check if email already exists
-  const emailExists = await UserModel.findOne({ email });
-  if (emailExists) {
-    return NextResponse.json(
-      { msg: 'Email already registered', field: 'email' },
-      { status: 409 },
-    );
-  }
-
-  // check if username already exists
-  const usernameExists = await UserModel.findOne({ username });
-  if (usernameExists) {
-    return NextResponse.json(
-      { msg: 'Username already registered', field: 'username' },
-      { status: 409 },
-    );
-  }
-
-  // hash password
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  // create user
-  const user = new UserModel({
-    firstName,
-    lastName,
-    username,
-    email,
-    phone,
-    password: hashedPassword,
-    role,
-  });
-  await user.save();
-  return NextResponse.json(
-    { msg: 'User created successfully', user },
-    { status: 201 },
-  );
-}
-
-// get user by id
-export async function GET(request: Request) {
-  // check user signed in and it is admin role
-  // if not admin, return error
-  const session: JWTPayload | null = await getSession();
-  if (!session) {
-    return NextResponse.json({ msg: 'Unauthorized' }, { status: 401 });
-  }
-  if ((session.user as { role: string }).role !== 'admin') {
-    return NextResponse.json({ msg: 'Unauthorized' }, { status: 401 });
-  }
-  const searchParams = new URLSearchParams(request.url.split('?')[1]);
-  const id = searchParams.get('id');
-
-  await connectDB();
-
-  if (id) {
-    const user = await UserModel.findById(id);
-    if (!user) {
-      return NextResponse.json({ msg: 'User not found' }, { status: 404 });
+    if (!firstName || !lastName || !username || !email || !password || !phone) {
+      return NextResponse.json({ msg: 'Missing fields' }, { status: 400 });
     }
-    return NextResponse.json(
-      { msg: 'successfully retrieved user', user },
-      { status: 200 },
-    );
-  } else {
-    const users = await UserModel.find();
-    return NextResponse.json(
-      { msg: 'successfully retrieved all users', total: users.length, users },
-      { status: 200 },
-    );
-  }
-}
 
-// delete user
-// take id from params and delete user
-export async function DELETE(request: Request) {
-  // const searchParams = new URLSearchParams(request.url.split('?')[1])
-  // const id = searchParams.get('id')
-
-  const { id } = await request.json();
-
-  await connectDB();
-  const user = await UserModel.findByIdAndDelete(id);
-  return NextResponse.json(
-    { msg: 'User deleted successfully', user },
-    { status: 200 },
-  );
-}
-
-// update user
-// take id from params and update user
-export async function PATCH(request: Request) {
-  const searchParams = new URLSearchParams(request.url.split('?')[1]);
-  const id = searchParams.get('id');
-
-  const body = await request.json();
-
-  // console.log(body)
-  // check if password changed and hash it and atleast 6 characters
-  if (body.password) {
-    if (body.password.length < 6) {
+    if (password.length < 6) {
       return NextResponse.json(
         { msg: 'Password must be at least 6 characters', field: 'password' },
         { status: 400 },
       );
     }
-    body.password = await bcrypt.hash(body.password, 10);
+
+    await connectDB();
+
+    const emailExists = await UserModel.findOne({ email });
+    if (emailExists) {
+      return NextResponse.json(
+        { msg: 'Email already registered', field: 'email' },
+        { status: 409 },
+      );
+    }
+
+    const usernameExists = await UserModel.findOne({ username });
+    if (usernameExists) {
+      return NextResponse.json(
+        { msg: 'Username already registered', field: 'username' },
+        { status: 409 },
+      );
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = new UserModel({
+      firstName,
+      lastName,
+      username,
+      email,
+      phone,
+      password: hashedPassword,
+      role,
+    });
+    await user.save();
+
+    return NextResponse.json(
+      { msg: 'User created successfully', user },
+      { status: 201 },
+    );
+  } catch (error) {
+    console.error('Error creating user:', error);
+    return NextResponse.json({ msg: 'Internal Server Error' }, { status: 500 });
   }
+}
 
-  await connectDB();
+// Get user by ID or all users
+export async function GET(request: Request) {
+  try {
+    const session = cookies().get('session')?.value;
+    const role = cookies().get('role')?.value;
+    if (!session || role !== 'admin') {
+      return NextResponse.json({ msg: 'Unauthorized' }, { status: 401 });
+    }
 
-  const user = await UserModel.findByIdAndUpdate(id, body, { new: true });
-  return NextResponse.json(
-    { msg: 'User updated successfully', user },
-    { status: 200 },
-  );
+    const searchParams = new URL(request.url).searchParams;
+    const id = searchParams.get('id');
+
+    await connectDB();
+
+    if (id) {
+      const user = await UserModel.findById(id);
+      if (!user) {
+        return NextResponse.json({ msg: 'User not found' }, { status: 404 });
+      }
+      return NextResponse.json(
+        { msg: 'Successfully retrieved user', user },
+        { status: 200 },
+      );
+    } else {
+      const users = await UserModel.find();
+      return NextResponse.json(
+        { msg: 'Successfully retrieved all users', total: users.length, users },
+        { status: 200 },
+      );
+    }
+  } catch (error) {
+    console.log('Error retrieving user(s):', error);
+    return NextResponse.json({ msg: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
+// Delete a user by ID
+export async function DELETE(request: Request) {
+  try {
+    const session = cookies().get('session')?.value;
+    const role = cookies().get('role')?.value;
+    if (!session || role !== 'admin') {
+      return NextResponse.json({ msg: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { id } = await request.json();
+
+    await connectDB();
+    const user = await UserModel.findByIdAndDelete(id);
+    if (!user) {
+      return NextResponse.json({ msg: 'User not found' }, { status: 404 });
+    }
+    return NextResponse.json(
+      { msg: 'User deleted successfully', user },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    return NextResponse.json({ msg: 'Internal Server Error' }, { status: 500 });
+  }
+}
+
+// Update a user by ID
+export async function PATCH(request: Request) {
+  try {
+    const session = cookies().get('session')?.value;
+    const role = cookies().get('role')?.value;
+    if (!session || role !== 'admin') {
+      return NextResponse.json({ msg: 'Unauthorized' }, { status: 401 });
+    }
+
+    const searchParams = new URL(request.url).searchParams;
+    const id = searchParams.get('id');
+    const body = await request.json();
+
+    if (body.password && body.password.length < 6) {
+      return NextResponse.json(
+        { msg: 'Password must be at least 6 characters', field: 'password' },
+        { status: 400 },
+      );
+    }
+
+    if (body.password) {
+      body.password = await bcrypt.hash(body.password, 10);
+    }
+
+    await connectDB();
+    const user = await UserModel.findByIdAndUpdate(id, body, { new: true });
+    if (!user) {
+      return NextResponse.json({ msg: 'User not found' }, { status: 404 });
+    }
+    return NextResponse.json(
+      { msg: 'User updated successfully', user },
+      { status: 200 },
+    );
+  } catch (error) {
+    console.error('Error updating user:', error);
+    return NextResponse.json({ msg: 'Internal Server Error' }, { status: 500 });
+  }
 }

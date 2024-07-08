@@ -124,6 +124,9 @@
 
 'use client';
 import { useEffect, useState } from 'react';
+import RateReviewIcon from '@mui/icons-material/RateReview';
+import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
+import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 
@@ -176,7 +179,6 @@ const AdminRequestsPage = () => {
                 <th className="p-2">Status</th>
                 <th className="p-2">Approved</th>
                 <th className="p-2">Action</th>
-                <th className="p-2">Cancel</th>
               </tr>
             </thead>
             <tbody>
@@ -184,7 +186,6 @@ const AdminRequestsPage = () => {
                 <tr
                   key={request._id}
                   className="border-b border-slate-300 cursor-pointer hover:bg-slate-100"
-                  onClick={() => router.push(`/admin/request/${request._id}`)}
                 >
                   <td className="p-2">{request.shop.name}</td>
                   <td className="p-2">{request.status}</td>
@@ -193,24 +194,30 @@ const AdminRequestsPage = () => {
                     <button
                       disabled={request.approved}
                       onClick={() => handleApproveRequest(request._id)}
-                      className={`bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded ${
+                      className={`hidden bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded ${
                         request.approved ? 'opacity-50 cursor-not-allowed' : ''
                       }`}
                     >
-                      Approve
+                      <DoneOutlineIcon />
                     </button>
-                  </td>
-                  <td className="p-2">
+                    <button
+                      onClick={() =>
+                        router.push(`/admin/request/${request._id}`)
+                      }
+                      className="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-1 px-3 rounded"
+                    >
+                      <RateReviewIcon />
+                    </button>
                     <button
                       disabled={request.status === 'cancelled'}
                       onClick={() => handleRejectRequest(request._id)}
-                      className={`bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded ${
+                      className={`hidden bg-red-500 hover:bg-red-700 text-white font-bold py-1 px-3 rounded ${
                         request.status === 'cancelled'
                           ? 'opacity-50 cursor-not-allowed'
                           : ''
                       }`}
                     >
-                      Cancel
+                      <CloseIcon />
                     </button>
                   </td>
                 </tr>

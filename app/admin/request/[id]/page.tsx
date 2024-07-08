@@ -49,23 +49,23 @@ const Page = ({ params }: { params: { id: string } }) => {
       <h1 className="text-2xl font-bold mb-4">Request Details</h1>
       <div className="flex mb-4">
         <div className="flex space-x-4">
-          <div
+          <button
             onClick={() => router.push(`/admin/request/edit/${request?._id}`)}
-            className={`bg-blue-500 text-white px-4 py-2 rounded ${request?.status === 'cancelled' ? 'hidden' : ''}`}
+            className={`bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded ${request?.status === 'cancelled' ? 'hidden' : ''}`}
           >
             Edit
-          </div>
-          <div
+          </button>
+          <button
             onClick={cancelRequest}
-            className={`bg-red-500 text-white px-4 py-2 rounded ${request?.status === 'cancelled' ? 'hidden' : ''}`}
+            className={`bg-red-500 hover:bg-red-700 text-white px-4 py-2 rounded ${request?.status === 'cancelled' ? 'hidden' : ''}`}
           >
             Cancel
-          </div>
-          <div
-            className={`bg-green-500 text-white px-4 py-2 rounded ${request?.approved ? 'hidden' : ''}`}
+          </button>
+          <button
+            className={`bg-green-500 hover:bg-green-700 text-white px-4 py-2 rounded ${request?.approved ? 'hidden' : ''}`}
           >
             Approve
-          </div>
+          </button>
         </div>
       </div>
       <div className="bg-white shadow-md rounded p-4 mb-4">
