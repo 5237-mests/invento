@@ -105,8 +105,8 @@ export async function GET(request: Request) {
 
 // Update item
 export async function PATCH(request: Request) {
-  const isAdmin = checkAdmin();
-  if (isAdmin) return isAdmin;
+  // const isAdmin = checkAdmin();
+  // if (isAdmin) return isAdmin;
 
   try {
     const body = await request.json();
@@ -139,8 +139,8 @@ export async function PATCH(request: Request) {
 
 // Delete item
 export async function DELETE(request: Request) {
-  const isAdmin = checkAdmin();
-  if (isAdmin) return isAdmin;
+  // const isAdmin = checkAdmin();
+  // if (isAdmin) return isAdmin;
 
   try {
     const searchParams = new URLSearchParams(request.url.split('?')[1]);
