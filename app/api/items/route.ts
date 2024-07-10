@@ -3,7 +3,7 @@ import itemModel from '@/models/itemModel';
 import itemShopRelation from '@/models/itemShopRelation';
 import itemStoreRelation from '@/models/itemStoreRelation';
 import { NextResponse } from 'next/server';
-import { checkAdmin, checkShopkeeper } from '@/lib/authMiddleWare';
+import { checkAdmin, checkShopkeeper, checkAuth } from '@/lib/authMiddleWare';
 
 // Connect to the database once
 connectDB();
@@ -29,8 +29,12 @@ export async function POST(request: Request) {
 
 // Get item(s)
 export async function GET(request: Request) {
-  const isAdmin = checkAdmin();
-  if (!isAdmin)
+  // const isAdmin = checkAdmin();
+  // if (!isAdmin)
+  //   return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+
+  const isAuth = checkAuth();
+  if (!isAuth)
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 
   try {

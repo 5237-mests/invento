@@ -15,7 +15,8 @@ export default function RootLayout({
     // fetch stores and shops
     const fetchStores = async () => {
       try {
-        await axios.get('/api/store');
+        const response = await axios.get('/api/store');
+        console.log(response.status);
       } catch (error) {
         console.error('Error fetching stores:', error);
       }
@@ -23,7 +24,8 @@ export default function RootLayout({
 
     const fetchShops = async () => {
       try {
-        await axios.get('/api/shop');
+        const response = await axios.get('/api/shop');
+        console.log(response.status);
       } catch (error) {
         console.error('Error fetching shops:', error);
       }
