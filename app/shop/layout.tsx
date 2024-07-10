@@ -10,7 +10,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchStores = async () => {
       try {
-        await axios.get('/api/store');
+        const response = await axios.get('/api/store');
+        console.log(response.status);
       } catch (error) {
         console.error('Error fetching stores:', error);
       }
@@ -18,7 +19,8 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
 
     const fetchShops = async () => {
       try {
-        await axios.get('/api/shop');
+        const response = await axios.get('/api/shop');
+        console.log(response.status);
       } catch (error) {
         console.error('Error fetching shops:', error);
       }
