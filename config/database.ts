@@ -1,4 +1,12 @@
 import mongoose from 'mongoose';
+// register all models
+import '../models/itemModel';
+import '../models/shopModel';
+import '../models/storeModel';
+import '../models/userModel';
+import '../models/requestModel';
+import '../models/itemShopRelation';
+import '../models/itemStoreRelation';
 
 const connectDB = async () => {
   if (mongoose.connections[0].readyState) {
