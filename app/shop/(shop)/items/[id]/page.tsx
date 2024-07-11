@@ -5,37 +5,20 @@ import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
 
 export default function Page({ params }: { params: { id: string } }) {
-  const [initialForm, setInitialForm] = useState({
-    productCode: '',
-    name: '',
-    price: '',
-    description: '',
-    category: '',
-    measurementUnit: '',
-    shopQuantity: 0,
-    storeQuantity: 0,
-  });
-  const [form, setForm] = useState({ ...initialForm });
+  const [item, setItem] = useState([{} as Item]);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { toast } = useToast();
 
   useEffect(() => {
     const fetchItem = async () => {
+      const shopId = '6681ea085f68cc1d3b9ceb55';
       try {
-        const response = await axios.get(`/api/items/?id=${params.id}`);
-        const itemData = {
-          productCode: response.data.item.productCode,
-          name: response.data.item.name,
-          price: response.data.item.price,
-          description: response.data.item.description,
-          category: response.data.item.category,
-          measurementUnit: response.data.item.measurementUnit,
-          shopQuantity: response.data.item?.shopQuantity || 0,
-          storeQuantity: response.data.item?.storeQuantity || 0,
-        };
-        setInitialForm(itemData);
-        setForm(itemData);
+        const response = await axios.get(
+          `/api/shop/items/?itemId=${params.id}&shopId=${shopId}`,
+        );
+
+        setItem(response.data.item);
         setLoading(false);
       } catch (error) {
         toast({
@@ -61,43 +44,59 @@ export default function Page({ params }: { params: { id: string } }) {
       <h1 className="text-lg  md:text-2xl font-bold mb-4">Item details.</h1>
       <div className="w-full max-w-lg">
         <form className="flex flex-col gap-4 text-slate-900">
-          {[
-            'productCode',
-            'name',
-            'price',
-            'description',
-            'category',
-            'measurementUnit',
-          ].map((field, index) => (
-            <div className="flex flex-col gap-1" key={index}>
-              <label htmlFor={field} className="">
-                {field
-                  .replace(/([A-Z])/g, ' $1')
-                  .replace(/^./, (str) => str.toUpperCase())}
-                :
-              </label>
-              <input
-                disabled
-                name={field}
-                placeholder={field
-                  .replace(/([A-Z])/g, ' $1')
-                  .replace(/^./, (str) => str.toUpperCase())}
-                value={String(form[field as keyof FormState])}
-                className="border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
-                type={field === 'price' ? 'number' : 'text'}
-              />
-            </div>
-          ))}
-
           <div className="flex flex-col gap-1">
-            <label className="">Shop Stock:</label>
-            <input
-              disabled
-              placeholder="shop Stock"
-              value={initialForm.shopQuantity}
-              className="border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
-              type="number"
-            />
+            {item?.map((item) => (
+              <div key={item.item.productCode} className="flex flex-col gap-1">
+                <label>Product Code: </label>
+                <input
+                  disabled
+                  value={item.item.productCode}
+                  className="border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+
+                <label>Name:</label>
+                <input
+                  disabled
+                  value={item.item.name}
+                  className="border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+
+                <label>Price: </label>
+                <input
+                  disabled
+                  value={item.item.price}
+                  className="border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+
+                <label>Description: </label>
+                <input
+                  disabled
+                  value={item.item.description}
+                  className="border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+
+                <label>Category: </label>
+                <input
+                  disabled
+                  value={item.item.category}
+                  className="border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+
+                <label>Measurement Unit: </label>
+                <input
+                  disabled
+                  value={item.item.measurementUnit}
+                  className="border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+
+                <label>Quantity: </label>
+                <input
+                  disabled
+                  value={item.quantity}
+                  className="border border-gray-300 rounded p-2 hover:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-500"
+                />
+              </div>
+            ))}
           </div>
         </form>
       </div>
@@ -105,11 +104,14 @@ export default function Page({ params }: { params: { id: string } }) {
   );
 }
 
-interface FormState {
-  productCode: string;
-  name: string;
-  price: string;
-  description: string;
-  category: string;
-  measurementUnit: string;
+interface Item {
+  item: {
+    productCode: string;
+    name: string;
+    price: string;
+    description: string;
+    category: string;
+    measurementUnit: string;
+  };
+  quantity: number;
 }

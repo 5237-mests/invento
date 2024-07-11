@@ -1,35 +1,9 @@
-'use client';
 import Links from '@/components/Links';
 import SideBar from '@/components/shop/sideBar';
 import logout from '@/lib/logout';
-import axios from 'axios';
 import Link from 'next/link';
-import { useEffect } from 'react';
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
-  useEffect(() => {
-    const fetchStores = async () => {
-      try {
-        const response = await axios.get('/api/store');
-        console.log(response.status);
-      } catch (error) {
-        console.error('Error fetching stores:', error);
-      }
-    };
-
-    const fetchShops = async () => {
-      try {
-        const response = await axios.get('/api/shop');
-        console.log(response.status);
-      } catch (error) {
-        console.error('Error fetching shops:', error);
-      }
-    };
-
-    fetchStores();
-    fetchShops();
-  }, []);
-
   return (
     <div className="flex flex-col md:flex-row bg-slate-100 min-h-screen">
       {/* Sidebar (hidden on mobile) */}

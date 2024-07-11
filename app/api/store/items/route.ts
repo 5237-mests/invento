@@ -11,8 +11,8 @@ export async function GET(request: Request) {
   await connectDB();
 
   if (id) {
-    const relationship = await itemStoreRelation.findById(id);
-    return NextResponse.json({ relationship }, { status: 200 });
+    const items = await itemStoreRelation.find({ store: id }).populate('item');
+    return NextResponse.json({ items }, { status: 200 });
   } else {
     const relationships = await itemStoreRelation.find();
     return NextResponse.json({ relationships }, { status: 200 });

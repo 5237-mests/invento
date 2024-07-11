@@ -49,14 +49,19 @@ export async function POST(request: Request) {
 // get all relationships or get relationship by id
 export async function GET(request: Request) {
   const searchParams = new URLSearchParams(request.url.split('?')[1]);
-  const id = searchParams.get('id');
+  const itemId = searchParams.get('itemId');
+  const shopId = searchParams.get('shopId');
   await connectDB();
 
-  if (id) {
-    const relationship = await itemShopRelation.findById(id);
-    return NextResponse.json({ relationship }, { status: 200 });
+  if (itemId) {
+    const item = await itemShopRelation
+      .find({ item: itemId, shop: shopId })
+      .populate('item');
+    return NextResponse.json({ item }, { status: 200 });
   } else {
-    const relationships = await itemShopRelation.find();
-    return NextResponse.json({ relationships }, { status: 200 });
+    const items = await itemShopRelation
+      .find({ shop: shopId })
+      .populate('item');
+    return NextResponse.json({ items }, { status: 200 });
   }
 }

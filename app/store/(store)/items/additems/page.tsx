@@ -4,17 +4,21 @@ import axios from 'axios';
 import { useToast } from '@/components/ui/use-toast';
 
 interface FormState {
-  productCode: string;
+  itemId: string;
+  storeId: string;
+  quantity: number;
   name: string;
-  storeStock: number;
+  productCode: string;
 }
 
 export default function Page() {
   const { toast } = useToast();
   const [form, setForm] = useState<FormState>({
-    productCode: '',
+    itemId: '',
+    storeId: '66819e7c954d3862e992cb9e',
+    quantity: 0,
     name: '',
-    storeStock: 0,
+    productCode: '',
   });
   const [isProductCodeValid, setIsProductCodeValid] = useState(true);
 
@@ -39,6 +43,7 @@ export default function Page() {
           setForm((prevForm) => ({
             ...prevForm,
             name: res.item.name,
+            itemId: res.item._id,
           }));
           setIsProductCodeValid(true);
         } else {
@@ -75,20 +80,37 @@ export default function Page() {
     }
 
     try {
-      await axios.patch(`/api/items/?productCode=${form.productCode}`, {
-        productCode: form.productCode,
-        name: form.name,
-        stockQuantity: {
-          store: form.storeStock,
-        },
-      });
+      // await axios.patch(`/api/items/?productCode=${form.productCode}`, {
+      //   productCode: form.productCode,
+      //   name: form.name,
+      //   stockQuantity: {
+      //     store: form.storeStock,
+      //   },
+      // });
+      // toast({
+      //   description: 'Item added to store successfully!',
+      // });
+      // setForm({
+      //   productCode: '',
+      //   name: '',
+      //   storeStock: 0,
+      // });
+      const body = {
+        itemId: form.itemId,
+        storeId: form.storeId,
+        quantity: Number(form.quantity),
+      };
+
+      await axios.post('/api/store/items', body);
       toast({
         description: 'Item added to store successfully!',
       });
       setForm({
-        productCode: '',
+        itemId: '',
+        storeId: '66819e7c954d3862e992cb9e',
+        quantity: 0,
         name: '',
-        storeStock: 0,
+        productCode: '',
       });
     } catch (error) {
       console.error('Error adding an item:', error);
@@ -150,13 +172,12 @@ export default function Page() {
             />
           </div>
           <div className="flex flex-col gap-1">
-            <label htmlFor="storeStock" className="font-medium">
-              Store Stock:
+            <label htmlFor="quantity" className="font-medium">
+              Quantity:*
             </label>
             <input
-              name="storeStock"
-              placeholder="Store Stock"
-              value={form.storeStock}
+              name="quantity"
+              value={form.quantity}
               onChange={handleChange}
               required
               className="border border-gray-300 rounded p-2 focus:outline-none focus:ring-2 focus:ring-red-500"

@@ -30,8 +30,8 @@ export default function Page() {
     const term = searchTerm.toLowerCase();
     const filtered = items.filter(
       (item) =>
-        item.name.toLowerCase().startsWith(term) ||
-        item.productCode.toLowerCase().startsWith(term),
+        item.item.name.toLowerCase().startsWith(term) ||
+        item.item.productCode.toLowerCase().startsWith(term),
     );
     setFilteredItems(filtered);
     setCurrentPage(1); // Reset to the first page on search
@@ -46,8 +46,9 @@ export default function Page() {
   };
 
   const fetchItems = async () => {
+    const shop = '6681ea085f68cc1d3b9ceb55';
     try {
-      const response = await axios.get('/api/items');
+      const response = await axios.get(`/api/shop/items/?shopId=${shop}`);
       setItems(response.data.items);
       setFilteredItems(response.data.items); // initialize filteredItems
       setLoading(false);
@@ -121,16 +122,16 @@ export default function Page() {
                   <tr
                     key={item._id}
                     className="hover:bg-slate-200"
-                    onClick={() => router.push(`/shop/items/${item._id}`)}
+                    onClick={() => router.push(`/shop/items/${item.item._id}`)}
                   >
                     <td className="py-1 px-2">
                       {searched ? index + 1 : items.indexOf(item) + 1}
                     </td>
-                    <td className="py-1 px-2">{item.name}</td>
-                    <td className="px-2">{item.productCode}</td>
-                    <td className="px-2">{item.measurementUnit}</td>
-                    <td className="px-2">{item.price}</td>
-                    <td className="px-2">{item.shopQuantity}</td>
+                    <td className="py-1 px-2">{item.item.name}</td>
+                    <td className="px-2">{item.item.productCode}</td>
+                    <td className="px-2">{item.item.measurementUnit}</td>
+                    <td className="px-2">{item.item.price}</td>
+                    <td className="px-2">{item.quantity}</td>
                   </tr>
                 ))}
               </tbody>
@@ -155,11 +156,14 @@ export default function Page() {
 
 interface Item {
   _id: string;
-  productCode: string;
-  name: string;
-  price: number;
-  description: string;
-  category: string;
-  shopQuantity: number;
-  measurementUnit: string;
+  item: {
+    _id: string;
+    productCode: string;
+    name: string;
+    price: number;
+    description: string;
+    category: string;
+    measurementUnit: string;
+  };
+  quantity: number;
 }

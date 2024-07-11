@@ -8,7 +8,7 @@ import store from '@/models/storeModel';
 import shop from '@/models/shopModel';
 import { NextResponse } from 'next/server';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-import { checkAdmin, checkShopkeeper, checkAuth } from '@/lib/authMiddleWare';
+import { checkAdmin, checkStorekeeper, checkAuth } from '@/lib/authMiddleWare';
 
 // Connect to the database once
 connectDB();
@@ -16,7 +16,7 @@ connectDB();
 // Create item
 export async function POST(request: Request) {
   const isAdmin = checkAdmin();
-  const isStorekeeper = checkShopkeeper();
+  const isStorekeeper = checkStorekeeper();
   if (!isAdmin && !isStorekeeper)
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 

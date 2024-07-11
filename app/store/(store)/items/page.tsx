@@ -31,8 +31,8 @@ export default function Page() {
     const term = searchTerm.toLowerCase();
     const filtered = items.filter(
       (item) =>
-        item.name.toLowerCase().startsWith(term) ||
-        item.productCode.toLowerCase().startsWith(term),
+        item.item.name.toLowerCase().startsWith(term) ||
+        item.item.productCode.toLowerCase().startsWith(term),
     );
     setFilteredItems(filtered);
     setCurrentPage(1); // Reset to the first page on search
@@ -48,9 +48,10 @@ export default function Page() {
 
   const fetchItems = async () => {
     try {
-      const response = await axios.get('/api/items');
+      const id = '66819e7c954d3862e992cb9e';
+      const response = await axios.get(`/api/store/items/?id=${id}`);
       setItems(response.data.items);
-      setFilteredItems(response.data.items); // initialize filteredItems
+      setFilteredItems(response.data.items);
       setLoading(false);
     } catch (error) {
       // console.error('Error fetching items:', error);
@@ -142,11 +143,11 @@ export default function Page() {
                     <td className="py-1 px-2">
                       {searched ? index + 1 : items.indexOf(item) + 1}
                     </td>
-                    <td className="py-1 px-2">{item.name}</td>
-                    <td className="px-2">{item.productCode}</td>
-                    <td className="px-2">{item.measurementUnit}</td>
-                    <td className="px-2">{item.price}</td>
-                    <td className="px-2">{item.storeQuantity}</td>
+                    <td className="py-1 px-2">{item.item.name}</td>
+                    <td className="px-2">{item.item.productCode}</td>
+                    <td className="px-2">{item.item.measurementUnit}</td>
+                    <td className="px-2">{item.item.price}</td>
+                    <td className="px-2">{item.quantity}</td>
                   </tr>
                 ))}
               </tbody>
@@ -171,12 +172,14 @@ export default function Page() {
 
 interface Item {
   _id: string;
-  productCode: string;
-  name: string;
-  price: number;
-  description: string;
-  category: string;
-  shopQuantity: number;
-  storeQuantity: number;
-  measurementUnit: string;
+  item: {
+    productCode: string;
+    name: string;
+    price: number;
+    description: string;
+    category: string;
+    shopQuantity: number;
+    measurementUnit: string;
+  };
+  quantity: number;
 }

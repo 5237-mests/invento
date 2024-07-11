@@ -1,41 +1,13 @@
-'use client'; // Assuming this is a typo, it should be 'use strict' or not used in this context
 import Links from '@/components/Links';
-import axios from 'axios';
 import SideBar from '@/components/admin/sideBar';
 import logout from '@/lib/logout';
 import Link from 'next/link';
-import { useEffect } from 'react';
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  useEffect(() => {
-    // Fetch stores and shops
-    const fetchStores = async () => {
-      try {
-        const response = await axios.get('/api/store');
-        console.log('Stores:', response.status);
-      } catch (error) {
-        console.error('Error fetching stores:', error);
-      }
-    };
-
-    const fetchShops = async () => {
-      try {
-        const response = await axios.get('/api/shop');
-        console.log('Shops:', response.status);
-      } catch (error) {
-        console.error('Error fetching shops:', error);
-      }
-    };
-
-    // Initiate data fetching
-    fetchStores();
-    fetchShops();
-  }, []);
-
   return (
     <>
       <div className="flex flex-col md:flex-row bg-slate-100 min-h-screen">
