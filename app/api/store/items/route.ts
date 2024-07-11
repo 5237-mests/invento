@@ -7,15 +7,20 @@ import { NextResponse } from 'next/server';
 // get all relationships or get relationship by id
 export async function GET(request: Request) {
   const searchParams = new URLSearchParams(request.url.split('?')[1]);
-  const id = searchParams.get('id');
+  const itemId = searchParams.get('itemId');
+  const storeId = searchParams.get('storeId');
   await connectDB();
 
-  if (id) {
-    const items = await itemStoreRelation.find({ store: id }).populate('item');
-    return NextResponse.json({ items }, { status: 200 });
+  if (itemId && storeId) {
+    const item = await itemStoreRelation
+      .find({ store: storeId, item: itemId })
+      .populate('item');
+    return NextResponse.json({ item }, { status: 200 });
   } else {
-    const relationships = await itemStoreRelation.find();
-    return NextResponse.json({ relationships }, { status: 200 });
+    const items = await itemStoreRelation
+      .find({ store: storeId })
+      .populate('item');
+    return NextResponse.json({ items }, { status: 200 });
   }
 }
 

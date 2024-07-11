@@ -1,7 +1,7 @@
 import Links from '@/components/Links';
 import SideBar from '@/components/shop/sideBar';
-import logout from '@/lib/logout';
 import Link from 'next/link';
+import LogoutButton from '@/components/logoutButton';
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -26,12 +26,7 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
             </ul>
           </div>
           <div className="mt-auto p-4">
-            <button
-              onClick={logout}
-              className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Logout
-            </button>
+            <LogoutButton />
           </div>
         </div>
       </div>

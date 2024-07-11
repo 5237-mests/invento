@@ -1,7 +1,6 @@
 'use client';
 import { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 export default function Page() {
@@ -47,11 +46,11 @@ export default function Page() {
   };
 
   const fetchItems = async () => {
+    const store = '66819e7c954d3862e992cb9e';
     try {
-      const id = '66819e7c954d3862e992cb9e';
-      const response = await axios.get(`/api/store/items/?id=${id}`);
+      const response = await axios.get(`/api/store/items/?storeId=${store}`);
       setItems(response.data.items);
-      setFilteredItems(response.data.items);
+      setFilteredItems(response.data.items); // initialize filteredItems
       setLoading(false);
     } catch (error) {
       // console.error('Error fetching items:', error);
@@ -85,23 +84,8 @@ export default function Page() {
   }
 
   return (
-    <div className="md:px-3 min-h-screen text-slate-950">
-      <div className="md:mx-3">
-        <div className="flex flex-row justify-between m-1 p-1">
-          <Link
-            href="/store/items/additems/new"
-            className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Create new item
-          </Link>
-          <Link
-            href="/store/items/additems"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Add item to store
-          </Link>
-        </div>
-
+    <div className="md:p-3 min-h-screen text-slate-950">
+      <div className="md:m-3">
         <div className="m-2 ">
           <p>Total items: {filteredItems.length}</p>
           <div className="">
@@ -138,7 +122,7 @@ export default function Page() {
                   <tr
                     key={item._id}
                     className="hover:bg-slate-200"
-                    onClick={() => router.push(`/store/items/${item._id}`)}
+                    onClick={() => router.push(`/store/items/${item.item._id}`)}
                   >
                     <td className="py-1 px-2">
                       {searched ? index + 1 : items.indexOf(item) + 1}
@@ -173,12 +157,12 @@ export default function Page() {
 interface Item {
   _id: string;
   item: {
+    _id: string;
     productCode: string;
     name: string;
     price: number;
     description: string;
     category: string;
-    shopQuantity: number;
     measurementUnit: string;
   };
   quantity: number;

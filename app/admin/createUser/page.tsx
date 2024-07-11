@@ -1,7 +1,7 @@
 'use client';
 import { useToast } from '@/components/ui/use-toast';
 import React, { useState } from 'react';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, FormEvent } from 'react';
 
 export default function Page() {
   const [user, setUser] = useState({
@@ -37,8 +37,11 @@ export default function Page() {
       [e.target.name]: '',
     });
   };
-  const createUser = () => {
-    // // check if all fields are filled
+
+  const createUser = async (e: FormEvent) => {
+    e.preventDefault();
+
+    // check if all fields are filled
     if (
       !user.firstName ||
       !user.lastName ||
@@ -47,46 +50,54 @@ export default function Page() {
       !user.password ||
       !user.role
     ) {
+      toast({
+        description: 'All fields are required',
+      });
       return;
     }
-    // // create user
-    // send to /api/user
-    fetch('/api/user', {
-      method: 'POST',
-      body: JSON.stringify(user),
-    })
-      .then((res) => res)
-      .then((data) => {
-        if (data.status == 201) {
-          toast({
-            description: 'User created successfully',
+
+    // create user
+    try {
+      const res = await fetch('/api/user', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(user),
+      });
+
+      const data = await res.json();
+
+      if (res.status === 201) {
+        toast({
+          description: 'User created successfully',
+        });
+      } else if (res.status === 409) {
+        if (data.field === 'email') {
+          setError({
+            ...error,
+            email: data.msg,
           });
-        } else if (data.status == 409) {
-          data.json().then((data) => {
-            if (data.field == 'email') {
-              setError({
-                ...error,
-                email: data.msg,
-              });
-            } else if (data.field == 'username') {
-              setError({
-                ...error,
-                username: data.msg,
-              });
-            }
-          });
-        } else if (data.status == 400) {
-          data.json().then((data) => {
-            if (data.field == 'password') {
-              setError({
-                ...error,
-                password: data.msg,
-              });
-            }
+        } else if (data.field === 'username') {
+          setError({
+            ...error,
+            username: data.msg,
           });
         }
-      })
-      .catch((err) => console.log(err));
+      } else if (res.status === 400) {
+        if (data.field === 'password') {
+          setError({
+            ...error,
+            password: data.msg,
+          });
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      toast({
+        description: 'An error occurred while creating the user',
+      });
+    }
   };
 
   return (
@@ -95,7 +106,7 @@ export default function Page() {
       <hr />
       <div>
         <div className="flex justify-between py-1">
-          <form className="w-full max-w-lg" action={createUser}>
+          <form className="w-full max-w-lg" onSubmit={createUser}>
             <div className="flex flex-wrap -mx-3 mb-6">
               <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                 <label
@@ -136,7 +147,7 @@ export default function Page() {
               <div className="w-full px-3">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                  htmlFor="grid-password"
+                  htmlFor="username"
                 >
                   Username
                 </label>
@@ -217,14 +228,15 @@ export default function Page() {
                 />
               </div>
             </div>
-            {/* include user role [admin, user, storekeeper, shopper] */}
+
+            {/* include user role [admin, user, storekeeper, shopkeeper] */}
             <div className="flex flex-wrap -mx-3 mb-6 gap-7">
               <div>
                 <input
                   type="radio"
                   id="admin"
                   name="role"
-                  value={'admin'}
+                  value="admin"
                   onChange={onChange}
                   required
                 />
@@ -238,12 +250,12 @@ export default function Page() {
                   type="radio"
                   id="storekeeper"
                   name="role"
-                  value={'storekeeper'}
+                  value="storekeeper"
                   onChange={onChange}
                   required
                 />
                 <label htmlFor="storekeeper" className="ml-2">
-                  StoreKeeper
+                  Storekeeper
                 </label>
               </div>
 
@@ -252,12 +264,12 @@ export default function Page() {
                   type="radio"
                   id="shopkeeper"
                   name="role"
-                  value={'shopkeeper'}
+                  value="shopkeeper"
                   onChange={onChange}
                   required
                 />
                 <label htmlFor="shopkeeper" className="ml-2">
-                  ShopKeeper
+                  Shopkeeper
                 </label>
               </div>
             </div>

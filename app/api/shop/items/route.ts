@@ -53,7 +53,7 @@ export async function GET(request: Request) {
   const shopId = searchParams.get('shopId');
   await connectDB();
 
-  if (itemId) {
+  if (itemId && shopId) {
     const item = await itemShopRelation
       .find({ item: itemId, shop: shopId })
       .populate('item');

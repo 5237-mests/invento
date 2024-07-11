@@ -1,6 +1,6 @@
 import Links from '@/components/Links';
 import SideBar from '@/components/admin/sideBar';
-import logout from '@/lib/logout';
+import LogoutButton from '@/components/logoutButton';
 import Link from 'next/link';
 
 export default function RootLayout({
@@ -43,12 +43,7 @@ export default function RootLayout({
               </ul>
             </div>
             <div className="mt-auto p-4">
-              <button
-                onClick={logout}
-                className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-              >
-                Logout
-              </button>
+              <LogoutButton />
             </div>
           </div>
         </div>

@@ -13,7 +13,6 @@ export default function Page() {
       try {
         const response = await axios.get('/api/store');
         setStores(response.data.stores);
-        console.log(response.data.stores);
       } catch (error) {
         console.log(error);
       }
