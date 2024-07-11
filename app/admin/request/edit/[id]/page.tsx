@@ -80,14 +80,20 @@ const Page = ({ params }: { params: { id: string } }) => {
     quantity: number;
   }[];
 
+  const removeItem = (index: number) => {
+    const updatedItems = [...formData.items];
+    updatedItems.splice(index, 1);
+    setFormData((prev) => ({ ...prev, items: updatedItems }) as request);
+  };
+
   if (loading) return <p className="text-center">Loading...</p>;
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
-    <div className="max-w-4xl mx-auto p-4">
+    <div className="max-w-4xl mx-auto p-4 flex justify-center items-center flex-col">
       <h1 className="text-2xl font-bold mb-4">Edit Request</h1>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div>
+      <form onSubmit={handleSubmit} className="space-y-4 w-11/12 md:w-7/12">
+        <div className="">
           <label className="block text-sm font-medium text-gray-700">
             Status:
           </label>
@@ -95,7 +101,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             type="text"
             disabled
             value={formData.status}
-            className="mt-1 block py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            className="w-full mt-1 block py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
           />
         </div>
         <div className="flex items-center">
@@ -104,7 +110,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             name="approved"
             checked={formData.approved}
             onChange={handleChange}
-            className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+            className="w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
           />
           <label className="ml-2 block text-sm font-medium text-red-700">
             Approve
@@ -112,9 +118,20 @@ const Page = ({ params }: { params: { id: string } }) => {
         </div>
         <h2 className="text-xl font-semibold mb-2">Items</h2>
         {formData.items.map((item, index) => (
-          <div key={item.item._id} className="space-y-2">
-            <p>
-              <strong>Item:</strong> {item.item.name}
+          <div
+            key={item.item._id}
+            className="space-y-2 border row-span-2 p-2 hover:bg-slate-300"
+          >
+            <p className="text-sm font-medium text-gray-700 flex justify-between">
+              <span>
+                <strong>Item:</strong> {item.item.name}
+              </span>
+              <span
+                onClick={() => removeItem(index)}
+                className="cursor-pointer hover:text-red-500"
+              >
+                {'X'}
+              </span>
             </p>
             <div>
               <label className="block text-sm font-medium text-gray-700">
@@ -125,7 +142,7 @@ const Page = ({ params }: { params: { id: string } }) => {
                 name="quantity"
                 value={item.quantity}
                 onChange={(e) => handleItemChange(index, e)}
-                className="mt-1 block py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="w-full mt-1 block py-2 px-3 border border-gray-200 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
               />
             </div>
           </div>

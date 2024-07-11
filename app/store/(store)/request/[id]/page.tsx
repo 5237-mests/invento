@@ -60,6 +60,18 @@ const Page = ({ params }: { params: { id: string } }) => {
     }
   };
 
+  const approveRequest = async () => {
+    try {
+      await axios.post(`/api/approve_request`, {
+        id: request?._id,
+      });
+      router.push('/admin/request');
+    } catch (error) {
+      console.error('Error approving request:', error);
+      setError('Failed to approve the request');
+    }
+  };
+
   if (loading) return <p className="text-center">Loading...</p>;
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
@@ -79,6 +91,7 @@ const Page = ({ params }: { params: { id: string } }) => {
             Cancel
           </button>
           <button
+            onClick={approveRequest}
             className={`bg-green-500 text-white px-4 py-2 rounded ${isButtonHidden(
               !request?.approved ||
                 request?.status === 'cancelled' ||
