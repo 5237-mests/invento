@@ -30,8 +30,8 @@ export default function Page() {
     const term = searchTerm.toLowerCase();
     const filtered = items.filter(
       (item) =>
-        item.item.name.toLowerCase().startsWith(term) ||
-        item.item.productCode.toLowerCase().startsWith(term),
+        item?.item?.name.toLowerCase().startsWith(term) ||
+        item?.item?.productCode.toLowerCase().startsWith(term),
     );
     setFilteredItems(filtered);
     setCurrentPage(1); // Reset to the first page on search
@@ -127,11 +127,11 @@ export default function Page() {
                     <td className="py-1 px-2">
                       {searched ? index + 1 : items.indexOf(item) + 1}
                     </td>
-                    <td className="py-1 px-2">{item.item.name}</td>
-                    <td className="px-2">{item.item.productCode}</td>
-                    <td className="px-2">{item.item.measurementUnit}</td>
-                    <td className="px-2">{item.item.price}</td>
-                    <td className="px-2">{item.quantity}</td>
+                    <td className="py-1 px-2">{item?.item?.name}</td>
+                    <td className="px-2">{item?.item?.productCode}</td>
+                    <td className="px-2">{item?.item?.measurementUnit}</td>
+                    <td className="px-2">{item?.item?.price}</td>
+                    <td className="px-2">{item?.quantity}</td>
                   </tr>
                 ))}
               </tbody>
