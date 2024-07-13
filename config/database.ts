@@ -7,6 +7,9 @@ import '../models/userModel';
 import '../models/requestModel';
 import '../models/itemShopRelation';
 import '../models/itemStoreRelation';
+import '../models/customerModel';
+import '../models/saleModel';
+import '../models/soldItemModel';
 
 const connectDB = async () => {
   if (mongoose.connections[0].readyState) {

@@ -2,6 +2,7 @@ import Links from '@/components/Links';
 import SideBar from '@/components/shop/sideBar';
 import Link from 'next/link';
 import LogoutButton from '@/components/logoutButton';
+import SelectLink from '@/components/SelectLink';
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -19,6 +20,12 @@ const RootLayout = ({ children }: { children: React.ReactNode }) => {
               <Link href="/shop/items">
                 <li className="p-2 hover:underline">Items</li>
               </Link>
+
+              {/* <Link href="/shop/sale/create">
+                <li className="p-2 hover:underline">Sales</li>
+              </Link> */}
+
+              <SelectLink />
 
               <Link href="/shop/request">
                 <li className="p-2 hover:underline">Request</li>
