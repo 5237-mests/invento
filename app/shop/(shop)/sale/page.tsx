@@ -33,6 +33,7 @@ const SalesPage = () => {
         <p className="text-center">No sales found.</p>
       ) : (
         <ul className="divide-y divide-gray-200">
+          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
           {sales?.map((sale: any) => (
             <SaleListItem key={sale._id} sale={sale} />
           ))}
