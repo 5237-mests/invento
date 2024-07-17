@@ -32,8 +32,8 @@ export default function Page({ params }: { params: { id: string } }) {
     const term = searchTerm.toLowerCase();
     const filtered = items.filter(
       (item) =>
-        item.name.toLowerCase().startsWith(term) ||
-        item.productCode.toLowerCase().startsWith(term),
+        item?.item?.name.toLowerCase().startsWith(term) ||
+        item?.item?.productCode.toLowerCase().startsWith(term),
     );
     setFilteredItems(filtered);
     setCurrentPage(1); // Reset to the first page on search
@@ -41,9 +41,9 @@ export default function Page({ params }: { params: { id: string } }) {
 
   const fetchShop = async () => {
     try {
-      const response = await axios.get(`/api/shop/?id=${params.id}`);
-      setItems(response.data.shop.items);
-      setFilteredItems(response.data.shop.items);
+      const response = await axios.get(`/api/shop/items/?shopId=${params.id}`);
+      setItems(response.data.items);
+      setFilteredItems(response.data.items);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching items:', error);
@@ -125,11 +125,11 @@ export default function Page({ params }: { params: { id: string } }) {
                     <td className="py-1 px-2">
                       {indexOfFirstItem + index + 1}
                     </td>
-                    <td className="py-1 px-2">{item.name}</td>
-                    <td className="px-2">{item.productCode}</td>
-                    <td className="px-2">{item.measurementUnit}</td>
-                    <td className="px-2">{item.price}</td>
-                    <td className="px-2">{item.quantity}</td>
+                    <td className="py-1 px-2">{item?.item?.name}</td>
+                    <td className="px-2">{item?.item?.productCode}</td>
+                    <td className="px-2">{item?.item?.measurementUnit}</td>
+                    <td className="px-2">{item?.item?.price}</td>
+                    <td className="px-2">{item?.quantity}</td>
                   </tr>
                 ))}
               </tbody>
@@ -154,11 +154,13 @@ export default function Page({ params }: { params: { id: string } }) {
 
 interface Item {
   _id: string;
-  productCode: string;
-  name: string;
-  price: number;
-  description: string;
-  category: string;
-  measurementUnit: string;
+  item: {
+    productCode: string;
+    name: string;
+    price: number;
+    description: string;
+    category: string;
+    measurementUnit: string;
+  };
   quantity: number;
 }

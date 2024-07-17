@@ -1,7 +1,7 @@
 import connectDB from '@/config/database';
 import shopModel from '@/models/shopModel';
 import { NextResponse } from 'next/server';
-import itemShopRelation from '@/models/itemShopRelation';
+// import itemShopRelation from '@/models/itemShopRelation';
 
 // Create shop
 export async function POST(request: Request) {
@@ -27,17 +27,17 @@ export async function GET(request: Request) {
       if (!shop) {
         return NextResponse.json({ error: 'Shop not found' }, { status: 404 });
       }
-
       // fetch quantity for an item in the shop
-      const itemQuantity = await itemShopRelation
-        .find({ shop: id })
-        .populate('item');
-      const itemsWithQuantity = itemQuantity.map((relation) => ({
-        ...relation.item.toObject(),
-        quantity: relation.quantity,
-      }));
-      const shopWithQuantity = { ...shop.toObject(), items: itemsWithQuantity };
-      return NextResponse.json({ shop: shopWithQuantity }, { status: 200 });
+      // const itemQuantity = await itemShopRelation
+      //   .find({ shop: id })
+      //   .populate('item');
+      // const itemsWithQuantity = itemQuantity.map((relation) => ({
+      //   ...relation.item.toObject(),
+      //   quantity: relation.quantity,
+      // }));
+      // const shopWithQuantity = { ...shop.toObject(), items: itemsWithQuantity };
+      // return NextResponse.json({ shop: shopWithQuantity }, { status: 200 });
+      return NextResponse.json({ shop }, { status: 200 });
     } else {
       const shops = await shopModel.find();
 
