@@ -13,13 +13,13 @@ export default async function Page() {
   // Redirect based on the user's role
   switch ((session.user as { role: string }).role) {
     case 'admin':
-      redirect('/admin');
+      redirect('/admin/items');
       break;
     case 'storekeeper':
-      redirect('/store');
+      redirect('/store/items');
       break;
     case 'shopkeeper':
-      redirect('/shop');
+      redirect('/shop/items');
       break;
     default:
       redirect('/unauthorized');

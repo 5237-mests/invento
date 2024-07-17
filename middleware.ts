@@ -16,19 +16,19 @@ export async function middleware(request: NextRequest) {
       userRole === 'admin' &&
       !request.nextUrl.pathname.startsWith('/admin')
     ) {
-      return Response.redirect(new URL('/admin', request.url));
+      return Response.redirect(new URL('/admin/items', request.url));
     }
     if (
       userRole === 'storekeeper' &&
       !request.nextUrl.pathname.startsWith('/store')
     ) {
-      return Response.redirect(new URL('/store', request.url));
+      return Response.redirect(new URL('/store/items', request.url));
     }
     if (
       userRole === 'shopkeeper' &&
       !request.nextUrl.pathname.startsWith('/shop')
     ) {
-      return Response.redirect(new URL('/shop', request.url));
+      return Response.redirect(new URL('/shop/items', request.url));
     }
 
     // Redirect to unauthorized page if the role is not recognized
