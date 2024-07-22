@@ -10,10 +10,10 @@ connectDB();
 
 // create sale
 export async function POST(req: Request) {
-  // const { shopId, items } = req.body;
-  const searchParams = new URLSearchParams(req.url.split('?')[1]);
-  const shopId = searchParams.get('shopId');
-  const items = searchParams.get('items'); // array of { itemId, quantity }
+  const { items, shop, customer } = await req.json();
+
+  // const searchParams = new URLSearchParams(req.url.split('?')[1]);
+  const shopId = shop;
 
   try {
     await connectDB();
@@ -46,12 +46,12 @@ export async function POST(req: Request) {
         return newSoldItem;
       }),
     );
-
     const totalAmount = soldItems.reduce((sum, soldItem) => {
       return sum + soldItem.price * soldItem.quantity;
     }, 0);
 
     const sale = new Sale({
+      customer: customer ? customer : null,
       shop: shop._id,
       items: soldItems.map((soldItem) => soldItem._id),
       totalAmount,
@@ -67,7 +67,12 @@ export async function POST(req: Request) {
       }),
     );
 
-    return NextResponse.json({ message: 'Sale created successfully', sale });
+    return NextResponse.json(
+      { message: 'Sale created successfully.' },
+      {
+        status: 201,
+      },
+    );
   } catch (error) {
     console.error('Error creating sale:', error);
     return NextResponse.json(
@@ -102,10 +107,42 @@ export async function GET(req: Request) {
       }
       return NextResponse.json({ sale }, { status: 200 });
     } else {
-      const sales = await Sale.find();
+      // fetch all sales
+      // populate the soldItems and shop and customer
+      // sort by date from newest to oldest
+      // populate items
+      // items is array of objects of soldItems
+
+      const sales = await Sale.find()
+        .populate('customer')
+        .populate('shop', 'name shopCode')
+        .populate({
+          path: 'items',
+          populate: {
+            path: 'item',
+          },
+        })
+        .sort({ saleDate: -1 });
       return NextResponse.json({ sales }, { status: 200 });
     }
   } catch (error) {
+    return NextResponse.json({ error }, { status: 500 });
+  }
+}
+
+// delete sale
+export async function DELETE(req: Request) {
+  const searchParams = new URLSearchParams(req.url.split('?')[1]);
+  const id = searchParams.get('id');
+  try {
+    await connectDB();
+    const deletedSale = await Sale.findByIdAndDelete(id);
+    if (!deletedSale) {
+      return NextResponse.json({ error: 'Sale not found' }, { status: 404 });
+    }
+    return NextResponse.json({ deletedSale }, { status: 200 });
+  } catch (error) {
+    console.error('Error deleting sale:', error);
     return NextResponse.json({ error }, { status: 500 });
   }
 }

@@ -15,11 +15,6 @@ const soldItemSchema = new Schema(
       type: Number,
       required: true,
     },
-    sale: {
-      type: Schema.Types.ObjectId,
-      ref: 'Sale',
-      required: true,
-    },
   },
   {
     timestamps: true,

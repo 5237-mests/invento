@@ -2,28 +2,35 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import SaleListItem from '@/components/shop/SaleListItem';
+import Spinner from '@/components/Spinner';
 
 const SalesPage = () => {
   const [sales, setSales] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  useEffect(() => {
-    const fetchSales = async () => {
-      try {
-        const response = await axios.get('/api/sales');
-        setSales(response.data.sales);
-        setLoading(false);
-      } catch (error) {
-        setError('Failed to fetch sales data');
-        setLoading(false);
-      }
-    };
+  const fetchSales = async () => {
+    try {
+      const response = await axios.get('/api/sales');
+      setSales(response.data.sales);
+      setLoading(false);
+    } catch (error) {
+      setError('Failed to fetch sales data');
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchSales();
   }, []);
 
-  if (loading) return <p className="text-center">Loading...</p>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-slate-950">
+        <Spinner />
+      </div>
+    );
+  }
   if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (

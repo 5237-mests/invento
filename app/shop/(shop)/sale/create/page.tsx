@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import SaleForm from '@/components/shop/SaleForm';
+import { toast } from '@/components/ui/use-toast';
 
 const Page = () => {
   const [items, setItems] = useState([]);
@@ -36,7 +37,21 @@ const Page = () => {
   const handleCreateSale = async (formData: any) => {
     try {
       const response = await axios.post('/api/sales', formData);
-      console.log('Sale created successfully:', response.data);
+      if (response.status === 201) {
+        // Handle success
+        toast({
+          title: 'Sales',
+          description: 'Sales created successfully',
+        });
+        window.location.reload();
+      } else {
+        // Handle error
+        toast({
+          title: 'Error creating sale',
+          description: 'Error creating sale',
+          variant: 'destructive',
+        });
+      }
       // Redirect or show success message
     } catch (error) {
       console.error('Error creating sale:', error);
@@ -44,8 +59,9 @@ const Page = () => {
     }
   };
 
-  if (loading) return <p className="text-center">Loading...</p>;
-  if (error) return <p className="text-center text-red-500">{error}</p>;
+  if (loading)
+    if (error)
+      if (error) return <p className="text-center text-red-500">{error}</p>;
 
   return (
     <div className="max-w-4xl mx-auto p-4">
