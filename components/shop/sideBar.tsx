@@ -1,9 +1,15 @@
 'use client';
 import Link from 'next/link';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetClose,
+} from '@/components/ui/sheet';
 import Image from 'next/image';
 import sidePic from '@/public/hamburgor.png';
 import logout from '@/lib/logout';
+import SelectLink from '../SelectLink';
 
 function SideBar() {
   return (
@@ -23,27 +29,36 @@ function SideBar() {
             <div className="flex flex-col h-full">
               <div className="p-4">
                 <h1 className="text-2xl font-bold">
-                  <Link href="/admin">Shop</Link>
+                  <Link href="/shop">Shop</Link>
                 </h1>
               </div>
               <div className="p-4">
                 <ul>
-                  <Link href="/admin/items">
-                    <li className={`p-2 hover:underline`}>Items</li>
-                  </Link>
+                  <SheetClose asChild>
+                    <Link href="/shop/items">
+                      <li className={`p-2 hover:underline`}>Items</li>
+                    </Link>
+                  </SheetClose>
 
-                  <Link href="/admin/request">
-                    <li className={`p-2 hover:underline`}>Request</li>
-                  </Link>
+                  {/* Sales links */}
+                  <SelectLink />
+
+                  <SheetClose asChild>
+                    <Link href="/shop/request">
+                      <li className={`p-2 hover:underline`}>Request</li>
+                    </Link>
+                  </SheetClose>
                 </ul>
               </div>
               <div className="mt-auto p-4">
-                <button
-                  onClick={logout}
-                  className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                >
-                  Logout
-                </button>
+                <SheetClose asChild>
+                  <button
+                    onClick={logout}
+                    className="w-full bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                  >
+                    Logout
+                  </button>
+                </SheetClose>
               </div>
             </div>
           </div>

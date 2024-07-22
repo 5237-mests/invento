@@ -3,9 +3,11 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Spinner from '@/components/Spinner';
 
 const Page = () => {
   const [requests, setRequests] = useState<request[]>([]);
+  const [loading, setLoading] = useState(true);
 
   const router = useRouter();
 
@@ -14,11 +16,14 @@ const Page = () => {
   }, []);
 
   const fetchRequests = async () => {
+    setLoading(true);
     try {
       const response = await axios.get('/api/request');
       setRequests(response.data.reqs);
+      setLoading(false);
     } catch (error) {
       console.error('Error fetching requests:', error);
+      setLoading(false);
     }
   };
 
@@ -30,6 +35,14 @@ const Page = () => {
       console.error('Error rejecting request:', error);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-slate-950">
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center p-3">

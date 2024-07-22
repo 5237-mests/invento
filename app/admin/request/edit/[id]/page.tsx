@@ -2,6 +2,7 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
+import Spinner from '@/components/Spinner';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const router = useRouter();
@@ -86,7 +87,13 @@ const Page = ({ params }: { params: { id: string } }) => {
     setFormData((prev) => ({ ...prev, items: updatedItems }) as request);
   };
 
-  if (loading) return <p className="text-center">Loading...</p>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-slate-950">
+        <Spinner />
+      </div>
+    );
+  }
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (

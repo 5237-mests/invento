@@ -3,6 +3,7 @@ import { useState, ChangeEvent, FormEvent, useEffect } from 'react';
 import axios from 'axios';
 import { useToast } from '@/components/ui/use-toast';
 import { useRouter } from 'next/navigation';
+import Spinner from '@/components/Spinner';
 
 export default function Page({ params }: { params: { id: string } }) {
   const [initialForm, setInitialForm] = useState({
@@ -73,7 +74,7 @@ export default function Page({ params }: { params: { id: string } }) {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center text-slate-950">
-        Loading...
+        <Spinner />
       </div>
     );
   }

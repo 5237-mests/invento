@@ -3,6 +3,7 @@ import { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import Spinner from '@/components/Spinner';
 
 interface Item {
   _id: string;
@@ -88,8 +89,8 @@ export default function Page() {
 
   if (loading) {
     return (
-      <div className="min-h-screen text-3xl flex items-center justify-center text-slate-950">
-        Loading...
+      <div className="min-h-screen flex items-center justify-center text-slate-950">
+        <Spinner />
       </div>
     );
   }

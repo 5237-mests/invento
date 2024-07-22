@@ -4,6 +4,7 @@ import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import debounce from 'lodash/debounce';
+import Spinner from '@/components/Spinner';
 
 export default function Page({ params }: { params: { id: string } }) {
   const [items, setItems] = useState<Item[]>([]);
@@ -69,8 +70,8 @@ export default function Page({ params }: { params: { id: string } }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen text-3xl flex items-center justify-center text-slate-950">
-        Loading...
+      <div className="min-h-screen flex items-center justify-center text-slate-950">
+        <Spinner />
       </div>
     );
   }

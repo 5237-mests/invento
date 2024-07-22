@@ -24,7 +24,6 @@ export default function Page({ params }: { params: { id: string } }) {
     const fetchStores = async () => {
       try {
         const response = await axios.get(`/api/store/?id=${params.id}`);
-        console.log(response.data.store);
         setStore(response.data.store);
       } catch (error) {
         console.log(error);

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import Spinner from '@/components/Spinner';
 
 const Page = ({ params }: { params: { id: string } }) => {
   const [request, setRequest] = useState<request | null>(null);
@@ -41,7 +42,13 @@ const Page = ({ params }: { params: { id: string } }) => {
     }
   };
 
-  if (loading) return <p className="text-center">Loading...</p>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-slate-950">
+        <Spinner />
+      </div>
+    );
+  }
   if (error) return <p className="text-center text-red-500">Error: {error}</p>;
 
   return (
