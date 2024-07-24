@@ -1,9 +1,13 @@
 'use client';
 import { useToast } from '@/components/ui/use-toast';
-import React, { useState } from 'react';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
 import { ChangeEvent, FormEvent } from 'react';
 
 export default function Page() {
+  const [userwork, setUserwork] = useState('');
+
+  const [shopOrStore, setShopOrStore] = useState([]);
   const [user, setUser] = useState({
     firstName: '',
     lastName: '',
@@ -12,9 +16,28 @@ export default function Page() {
     password: '',
     phone: '',
     role: '',
+    workAt: '',
+    onModel: '',
   });
 
   const { toast } = useToast();
+
+  useEffect(() => {
+    // fetch shops or stores according to userwork
+    const fetchShopsORStores = async () => {
+      if (userwork === 'shop') {
+        // fetch shops
+        const shops = await axios.get('/api/shop');
+        setShopOrStore(shops.data.shops);
+      } else if (userwork === 'store') {
+        // fetch stores
+        const stores = await axios.get('/api/store');
+        setShopOrStore(stores.data.stores);
+      }
+    };
+
+    fetchShopsORStores();
+  }, [userwork]);
 
   // error state
   const [error, setError] = useState({
@@ -25,10 +48,11 @@ export default function Page() {
     password: '',
     phone: '',
     role: '',
+    workAt: '',
   });
 
   // write onChange handler
-  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const onChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setUser({ ...user, [e.target.name]: e.target.value });
 
     // reset error
@@ -40,7 +64,6 @@ export default function Page() {
 
   const createUser = async (e: FormEvent) => {
     e.preventDefault();
-
     // check if all fields are filled
     if (
       !user.firstName ||
@@ -57,6 +80,10 @@ export default function Page() {
     }
 
     // create user
+    user.onModel =
+      userwork === 'shop' ? 'Shop' : userwork === 'store' ? 'Store' : '';
+
+    // console.log(user);
     try {
       const res = await fetch('/api/user', {
         method: 'POST',
@@ -102,8 +129,18 @@ export default function Page() {
 
   return (
     <div className="ml-7 text-slate-950">
-      <h1 className="text-2xl font-bold py-6">Create User</h1>
-      <hr />
+      <h1 className="text-2xl font-bold py-2">Create User</h1>
+      <div className="py-2">
+        <select
+          onChange={(e) => setUserwork(e.target.value)}
+          name="type"
+          className="p-2 bg-transparent border border-gray-200 rounded"
+        >
+          <option value="">Select User work</option>
+          <option value="store">STORE</option>
+          <option value="shop">SHOP</option>
+        </select>
+      </div>
       <div>
         <div className="flex justify-between py-1">
           <form className="w-full max-w-lg" onSubmit={createUser}>
@@ -116,7 +153,7 @@ export default function Page() {
                   First Name
                 </label>
                 <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="appearance-none block w-full text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="grid-first-name"
                   type="text"
                   name="firstName"
@@ -133,7 +170,7 @@ export default function Page() {
                   Last Name
                 </label>
                 <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="appearance-none block w-full text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="grid-last-name"
                   name="lastName"
                   type="text"
@@ -155,7 +192,7 @@ export default function Page() {
                   <p className="text-red-500">{error.username}</p>
                 )}
                 <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="appearance-none block w-full text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="username"
                   type="text"
                   name="username"
@@ -175,7 +212,7 @@ export default function Page() {
                 </label>
                 {error.email && <p className="text-red-500">{error.email}</p>}
                 <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="appearance-none block w-full text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="email"
                   type="email"
                   name="email"
@@ -196,7 +233,7 @@ export default function Page() {
                 </label>
                 {error.phone && <p className="text-red-500">{error.phone}</p>}
                 <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="appearance-none block w-full text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="phone"
                   type="text"
                   name="phone"
@@ -218,19 +255,36 @@ export default function Page() {
                   <p className="text-red-500">{error.password}</p>
                 )}
                 <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="appearance-none block w-full text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="password"
                   type="password"
                   name="password"
-                  placeholder="******************"
+                  placeholder="*************"
                   onChange={onChange}
                   required
                 />
               </div>
             </div>
 
+            <div className="py-2 w-full my-2">
+              <select
+                onChange={onChange}
+                name="workAt"
+                className="p-2 bg-transparent w-full border border-gray-200 rounded"
+              >
+                <option value="">Select User work place</option>
+                {shopOrStore?.map(
+                  (shopstore: { _id: string; name: string }) => (
+                    <option key={shopstore._id} value={shopstore._id}>
+                      {shopstore.name}
+                    </option>
+                  ),
+                )}
+              </select>
+            </div>
+
             {/* include user role [admin, user, storekeeper, shopkeeper] */}
-            <div className="flex flex-wrap -mx-3 mb-6 gap-7">
+            <div className="flex flex-wrap mx-3 mb-6 gap-7 mt-4">
               <div>
                 <input
                   type="radio"

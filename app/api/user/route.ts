@@ -7,8 +7,17 @@ import { cookies } from 'next/headers';
 // Create a new user
 export async function POST(request: Request) {
   try {
-    const { firstName, lastName, username, email, password, phone, role } =
-      await request.json();
+    const {
+      firstName,
+      lastName,
+      username,
+      email,
+      password,
+      phone,
+      role,
+      workAt,
+      onModel,
+    } = await request.json();
 
     if (!firstName || !lastName || !username || !email || !password || !phone) {
       return NextResponse.json({ msg: 'Missing fields' }, { status: 400 });
@@ -41,7 +50,7 @@ export async function POST(request: Request) {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = new UserModel({
+    const user = await UserModel.create({
       firstName,
       lastName,
       username,
@@ -49,8 +58,9 @@ export async function POST(request: Request) {
       phone,
       password: hashedPassword,
       role,
+      workAt,
+      onModel,
     });
-    await user.save();
 
     return NextResponse.json(
       { msg: 'User created successfully', user },
@@ -86,7 +96,8 @@ export async function GET(request: Request) {
         { status: 200 },
       );
     } else {
-      const users = await UserModel.find();
+      const users = await UserModel.find().populate('workAt');
+      console.log(users);
       return NextResponse.json(
         { msg: 'Successfully retrieved all users', total: users.length, users },
         { status: 200 },

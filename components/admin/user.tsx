@@ -2,6 +2,8 @@
 import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
+import Spinner from '../Spinner';
 
 interface userType {
   _id: string;
@@ -12,27 +14,29 @@ interface userType {
   password: string;
   phone: string;
   role: string;
+  workAt: {
+    _id: string;
+    name: string;
+  };
 }
 
 function User() {
   const router = useRouter();
   const [users, setusers] = useState([{} as userType]);
+  const [loading, setLoading] = useState(false);
   //  want to do crud on User model for admin purpose
   //  get all users
   //  delete user
   //  update user
   //  create user
 
-  const getAllUsers = () => {
-    fetch('/api/user', {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => setusers(data.users))
-      .catch((err) => console.log(err));
+  const getAllUsers = async () => {
+    setLoading(true);
+    const res = await axios.get('/api/user');
+    if (res.status == 200) {
+      setLoading(false);
+    }
+    setusers(res.data.users);
   };
 
   const deleteUser = (id: string) => {
@@ -56,6 +60,14 @@ function User() {
     getAllUsers();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Spinner />
+      </div>
+    );
+  }
+
   return (
     <div className="p-4 ml-3 w-full h-screen">
       <div className="user-table">
@@ -75,6 +87,7 @@ function User() {
               <th className="py-3">Name</th>
               <th>Username</th>
               <th>Email</th>
+              <th>Work at</th>
               <th>Role</th>
               <th>Action</th>
             </tr>
@@ -92,6 +105,7 @@ function User() {
                   <td onClick={() => router.push(`/admin/user/${user._id}`)}>
                     {user.email}
                   </td>
+                  <td>{user?.workAt?.name}</td>
                   <td onClick={() => router.push(`/admin/user/${user._id}`)}>
                     {user.role}
                   </td>

@@ -35,6 +35,14 @@ const userSchema = new Schema(
       enum: ['admin', 'user', 'shopkeeper', 'storekeeper', 'customer'],
       default: 'user',
     },
+    workAt: {
+      type: Schema.Types.ObjectId,
+      refPath: 'onModel',
+    },
+    onModel: {
+      type: String,
+      enum: ['Shop', 'Store'],
+    },
     createdAt: {
       type: Date,
       default: Date.now(),
