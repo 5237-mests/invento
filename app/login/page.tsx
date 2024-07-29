@@ -1,74 +1,31 @@
 'use client';
-import React, { useState } from 'react';
-// import { useToast } from '@/components/ui/use-toast';
-// import { useRouter } from 'next/navigation';
+import React, { FormEvent, useState } from 'react';
 import Link from 'next/link';
-import navigate from './action';
+import navigate from './action'; // Ensure this function is properly defined
+
 export default function Page() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  // const [error, setError] = useState(' ');
-  // const { toast } = useToast();
-  // const router = useRouter();
+  const [error, setError] = useState('');
 
-  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault()
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      formData.append('email', email);
+      formData.append('password', password);
 
-  //   if (!email || !password) {
-  //     toast({
-  //       title: 'Error',
-  //       description: 'Please enter email and password',
-  //       variant: 'destructive',
-  //     })
-  //     return
-  //   }
-
-  //   const response = await fetch('/api/login', {
-  //     method: 'POST',
-  //     headers: {
-  //       'Content-Type': 'application/json',
-  //     },
-  //     body: JSON.stringify({ email, password }),
-  //   })
-
-  //   if (response.ok) {
-  //     toast({
-  //       title: 'Success',
-  //       description: 'Login successful',
-  //     })
-  //     // store token in local storage
-  //     const data = await response.json()
-  //     localStorage.setItem('user', JSON.stringify(data))
-
-  //     // write route depending on the role
-  //     if (data.user.role === 'admin') {
-  //       router.push('/')
-  //     } else if (data.user.role === 'storekeeper') {
-  //       router.push('/storekeeper')
-  //     } else if (data.user.role === 'shopkeeper') {
-  //       router.push('/shopkeeper')
-  //     } else {
-  //       router.push('/unauthorized')
-  //     }
-
-  //   } else {
-  //     toast({
-  //       title: 'Error',
-  //       description: 'Invalid email or password',
-  //       variant: 'destructive',
-  //     })
-  //   }
-  // }
+      await navigate(formData);
+    } catch (err) {
+      setError('Please check your credentials and try again.');
+    }
+  };
 
   return (
     <div className="flex items-center justify-center h-screen">
       <div className="bg-slate-700 p-8 rounded-lg shadow-md hover:shadow-2xl">
         <h1 className="text-3xl font-bold mb-6 text-center">Login</h1>
-        <form
-          className="space-y-4"
-          // onSubmit={handleSubmit}
-          action={navigate}
-        >
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="block font-semibold">
               Email
@@ -101,7 +58,7 @@ export default function Page() {
             />
           </div>
 
-          {/* {error && <div className="text-red-500 text-sm">{error}</div>} */}
+          {error && <div className="text-red-500 text-sm">{error}</div>}
 
           <div>
             <button

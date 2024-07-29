@@ -7,11 +7,10 @@ const navigate = async (formData: FormData) => {
 
   try {
     const logd = await login(formData);
-    if (logd) {
-      loged = true;
-    }
+    if (logd) loged = true;
   } catch (error) {
-    console.log('er', error);
+    console.error('error', error);
+    throw error;
   }
 
   if (loged) {
