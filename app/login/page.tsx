@@ -15,7 +15,9 @@ export default function Page() {
       formData.append('email', email);
       formData.append('password', password);
 
-      await navigate(formData);
+      const response = await navigate(formData);
+      localStorage.setItem('user', JSON.stringify(response.user));
+      window.location.href = '/';
     } catch (err) {
       setError('Please check your credentials and try again.');
     }

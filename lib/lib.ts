@@ -47,7 +47,7 @@ export async function login(formData: FormData) {
   // Save the session in a cookie
   cookies().set('session', session, { expires, httpOnly: true });
   cookies().set('role', user.role, { expires, httpOnly: true });
-  return true;
+  return { user, loged: true };
 }
 
 export async function logout() {

@@ -47,8 +47,9 @@ export default function Page() {
   };
 
   const fetchItems = async () => {
-    const shop = '6681ea085f68cc1d3b9ceb55';
     try {
+      const user = JSON.parse(localStorage.getItem('user')!);
+      const shop = user['workAt'];
       const response = await axios.get(`/api/shop/items/?shopId=${shop}`);
       setItems(response.data.items);
       setFilteredItems(response.data.items); // initialize filteredItems
