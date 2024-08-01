@@ -45,8 +45,9 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const approveRequest = async () => {
     try {
-      await axios.post(`/api/approve_request`, {
-        id: request?._id,
+      await axios.patch(`/api/request/?id=${request?._id}`, {
+        approved: true,
+        status: 'approved',
       });
       router.push('/admin/request');
     } catch (error) {

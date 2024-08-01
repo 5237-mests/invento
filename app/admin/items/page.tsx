@@ -154,8 +154,8 @@ export default function Page() {
                     <td className="px-2">{item.productCode}</td>
                     <td className="px-2">{item.measurementUnit}</td>
                     <td className="px-2">{item.price}</td>
-                    <td className="px-2">{item.shopQuantity}</td>
                     <td className="px-2">{item.storeQuantity}</td>
+                    <td className="px-2">{item.shopQuantity}</td>
                     <td className="px-2">
                       {item.storeQuantity + item.shopQuantity}
                     </td>

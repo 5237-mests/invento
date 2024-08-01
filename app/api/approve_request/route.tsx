@@ -17,6 +17,7 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     const req_id = body.id;
+    const storeId = body.storeId;
 
     if (!req_id) {
       return NextResponse.json(
@@ -78,7 +79,6 @@ export async function POST(request: Request) {
     await Promise.all(items);
 
     // Update store by deducting items from store
-    const storeId = '66819e7c954d3862e992cb9e';
     const deductItemFromStore = async (
       item: string,
       store: string,

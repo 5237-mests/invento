@@ -16,7 +16,7 @@ function Page() {
     };
 
     fetchCustomers();
-  });
+  }, []);
   return (
     <div className="p-5 m-7 h-screen text-slate-950">
       <div>
