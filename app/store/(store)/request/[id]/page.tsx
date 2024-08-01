@@ -63,8 +63,11 @@ const Page = ({ params }: { params: { id: string } }) => {
 
   const approveRequest = async () => {
     try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const store = user['workAt'];
       await axios.post(`/api/approve_request`, {
         id: request?._id,
+        storeId: store,
       });
       router.push('/admin/request');
     } catch (error) {

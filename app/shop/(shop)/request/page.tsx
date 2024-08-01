@@ -18,7 +18,9 @@ const Page = () => {
   const fetchRequests = async () => {
     setLoading(true);
     try {
-      const response = await axios.get('/api/request');
+      const user = JSON.parse(localStorage.getItem('user')!);
+      const shop = user['workAt'];
+      const response = await axios.get(`/api/request/?shopId=${shop}`);
       setRequests(response.data.reqs);
       setLoading(false);
     } catch (error) {

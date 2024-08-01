@@ -15,7 +15,7 @@ export default function Page() {
   const { toast } = useToast();
   const [form, setForm] = useState<FormState>({
     itemId: '',
-    storeId: '66819e7c954d3862e992cb9e',
+    storeId: '',
     quantity: 0,
     name: '',
     productCode: '',
@@ -80,24 +80,11 @@ export default function Page() {
     }
 
     try {
-      // await axios.patch(`/api/items/?productCode=${form.productCode}`, {
-      //   productCode: form.productCode,
-      //   name: form.name,
-      //   stockQuantity: {
-      //     store: form.storeStock,
-      //   },
-      // });
-      // toast({
-      //   description: 'Item added to store successfully!',
-      // });
-      // setForm({
-      //   productCode: '',
-      //   name: '',
-      //   storeStock: 0,
-      // });
+      const user = localStorage.getItem('user');
+      const store = JSON.parse(user!)['workAt'];
       const body = {
         itemId: form.itemId,
-        storeId: form.storeId,
+        storeId: store,
         quantity: Number(form.quantity),
       };
 
@@ -107,7 +94,7 @@ export default function Page() {
       });
       setForm({
         itemId: '',
-        storeId: '66819e7c954d3862e992cb9e',
+        storeId: '',
         quantity: 0,
         name: '',
         productCode: '',

@@ -3,6 +3,7 @@ import { useState, useEffect, ChangeEvent } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import Spinner from '@/components/Spinner';
+import Link from 'next/link';
 
 export default function Page() {
   const [items, setItems] = useState<Item[]>([]);
@@ -47,8 +48,9 @@ export default function Page() {
   };
 
   const fetchItems = async () => {
-    const store = '66819e7c954d3862e992cb9e';
     try {
+      const user = JSON.parse(localStorage.getItem('user')!);
+      const store = user['workAt'];
       const response = await axios.get(`/api/store/items/?storeId=${store}`);
       setItems(response.data.items);
       setFilteredItems(response.data.items); // initialize filteredItems
@@ -87,17 +89,27 @@ export default function Page() {
   return (
     <div className="md:p-3 min-h-screen text-slate-950">
       <div className="md:m-3">
-        <div className="m-2 ">
-          <p>Total items: {filteredItems.length}</p>
-          <div className="">
-            <p className="p-1">Search item by name or product code</p>
-            <input
-              type="text"
-              placeholder="Search..."
-              className="border border-gray-300 rounded p-1 text-slate-950"
-              value={searchTerm}
-              onChange={handleSearchChange}
-            />
+        <div className="m-2 flex justify-between">
+          <div>
+            <p>Total items: {filteredItems.length}</p>
+            <div className="">
+              <p className="p-1">Search item by name or product code</p>
+              <input
+                type="text"
+                placeholder="Search..."
+                className="border border-gray-300 rounded p-1 text-slate-950"
+                value={searchTerm}
+                onChange={handleSearchChange}
+              />
+            </div>
+          </div>
+          <div>
+            <Link
+              href="/store/items/additems"
+              className="bg-red-500 text-white p-3 rounded"
+            >
+              Add item to store
+            </Link>
           </div>
         </div>
 

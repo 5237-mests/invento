@@ -13,8 +13,9 @@ export default function Page({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     const fetchItem = async () => {
-      const storeId = '66819e7c954d3862e992cb9e';
       try {
+        const user = localStorage.getItem('user');
+        const storeId = JSON.parse(user!)['workAt'];
         const response = await axios.get(
           `/api/store/items/?itemId=${params.id}&storeId=${storeId}`,
         );

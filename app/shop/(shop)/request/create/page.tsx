@@ -9,10 +9,10 @@ interface Item {
   quantity: number;
 }
 
-interface Shop {
-  _id: string;
-  name: string;
-}
+// interface Shop {
+//   _id: string;
+//   name: string;
+// }
 
 interface NewlyAddedItem {
   item: string;
@@ -22,16 +22,16 @@ interface NewlyAddedItem {
 
 export default function RequestComponent() {
   const [items, setItems] = useState<Item[]>([]);
-  const [shops, setShops] = useState<Shop[]>([]);
+  // const [shops, setShops] = useState<Shop[]>([]);
   const [selectedItem, setSelectedItem] = useState<string>('');
-  const [selectedShop, setSelectedShop] = useState<string>('');
-  const [quantity, setQuantity] = useState<number>(0);
+  // const [selectedShop, setSelectedShop] = useState<string>('');
+  const [quantity, setQuantity] = useState(1);
   const [loading, setLoading] = useState<boolean>(true);
   const [newlyAddedItem, setNewlyAddedItem] = useState<NewlyAddedItem[]>([]);
 
   useEffect(() => {
     fetchItems();
-    fetchShops();
+    // fetchShops();
   }, []);
 
   const fetchItems = async () => {
@@ -44,25 +44,28 @@ export default function RequestComponent() {
     }
   };
 
-  const fetchShops = async () => {
-    try {
-      const response = await axios.get('/api/shop'); // Adjust the endpoint if different
-      setShops(response.data.shops);
-      setLoading(false);
-    } catch (error) {
-      console.error('Error fetching shops:', error);
-    }
-  };
+  // const fetchShops = async () => {
+  //   try {
+  //     const response = await axios.get('/api/shop'); // Adjust the endpoint if different
+  //     setShops(response.data.shops);
+  //     setLoading(false);
+  //   } catch (error) {
+  //     console.error('Error fetching shops:', error);
+  //   }
+  // };
 
   const handleCreateRequest = async (e: FormEvent) => {
     e.preventDefault();
+    if (newlyAddedItem.length === 0) return;
     try {
-      const newRequest = { items: newlyAddedItem, shop: selectedShop };
+      const user = JSON.parse(localStorage.getItem('user')!);
+      const shop = user['workAt'];
+      const newRequest = { items: newlyAddedItem, shop: shop };
       await axios.post('/api/request', newRequest);
       // Reset form after successful request
       setSelectedItem('');
-      setSelectedShop('');
-      setQuantity(0);
+      // setSelectedShop('');
+      setQuantity(1);
       setNewlyAddedItem([]);
     } catch (error) {
       console.error('Error creating request:', error);
@@ -91,7 +94,7 @@ export default function RequestComponent() {
     }
     // Reset item and quantity fields after adding
     setSelectedItem('');
-    setQuantity(0);
+    setQuantity(1);
   };
 
   if (loading) {
@@ -107,7 +110,6 @@ export default function RequestComponent() {
             className="p-3 bg-white border border-gray-300 rounded-md"
             value={selectedItem}
             onChange={(e) => setSelectedItem(e.target.value)}
-            required
           >
             <option value="" disabled>
               Select Item
@@ -118,7 +120,7 @@ export default function RequestComponent() {
               </option>
             ))}
           </select>
-          <select
+          {/* <select
             className="p-3 bg-white border border-gray-300 rounded-md"
             value={selectedShop}
             onChange={(e) => setSelectedShop(e.target.value)}
@@ -132,13 +134,12 @@ export default function RequestComponent() {
                 {shop.name}
               </option>
             ))}
-          </select>
+          </select> */}
           <input
             className="p-3 bg-white border border-gray-300 rounded-md"
             type="number"
             value={quantity}
             onChange={(e) => setQuantity(Number(e.target.value))}
-            required
             min={1}
           />
           <div
@@ -148,7 +149,7 @@ export default function RequestComponent() {
             Add Item
           </div>
           <button
-            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+            className={`bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded ${newlyAddedItem.length === 0 ? 'cursor-not-allowed opacity-50' : ''}`}
             type="submit"
           >
             Create Request

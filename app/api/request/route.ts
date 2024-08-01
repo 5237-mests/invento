@@ -30,6 +30,7 @@ export async function GET(request: Request) {
   try {
     const searchParams = new URL(request.url).searchParams;
     const id = searchParams.get('id');
+    const shopId = searchParams.get('shopId');
 
     if (id) {
       const req = await requestModel
@@ -43,6 +44,12 @@ export async function GET(request: Request) {
         );
       }
       return NextResponse.json({ req }, { status: 200 });
+    } else if (shopId) {
+      const reqs = await requestModel
+        .find({ shop: shopId })
+        .populate('items.item')
+        .populate('shop');
+      return NextResponse.json({ reqs }, { status: 200 });
     } else {
       const reqs = await requestModel
         .find()
