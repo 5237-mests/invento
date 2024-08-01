@@ -34,7 +34,6 @@ const SaleListItem = ({
     <li className="py-4 hover:p-1">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-xl">{`Sale ID: ${sale._id}`}</h2>
           <p className="text-sm text-gray-500">{`Shop: ${sale.shop.name}`}</p>
           <p className="text-sm text-gray-500">{`Customer: ${sale.customer ? sale.customer.firstName + ' ' + sale.customer.lastName : 'N/A'}`}</p>
         </div>

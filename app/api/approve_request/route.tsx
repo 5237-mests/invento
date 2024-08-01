@@ -60,7 +60,11 @@ export async function POST(request: Request) {
       quantity: number,
     ) => {
       try {
-        const res = await axios.post(`http://localhost:3000/api/shop/items`, {
+        const baseUrl =
+          process.env.NODE_ENV === 'development'
+            ? process.env.BASE_URL_LOCAL
+            : process.env.BASE_URL_LIVE;
+        const res = await axios.post(`${baseUrl}/api/shop/items`, {
           itemId: item,
           shopId: shop,
           quantity: quantity,
@@ -85,7 +89,11 @@ export async function POST(request: Request) {
       quantity: number,
     ) => {
       try {
-        const res = await axios.post(`http://localhost:3000/api/store/items`, {
+        const baseUrl =
+          process.env.NODE_ENV === 'development'
+            ? process.env.BASE_URL_LOCAL
+            : process.env.BASE_URL_LIVE;
+        const res = await axios.post(`${baseUrl}/api/store/items`, {
           itemId: item,
           storeId: store,
           quantity: -quantity,

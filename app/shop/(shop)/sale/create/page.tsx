@@ -7,22 +7,20 @@ import { toast } from '@/components/ui/use-toast';
 const Page = () => {
   const [items, setItems] = useState([]);
   const [customers, setCustomers] = useState([]);
-  const [shops, setShops] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchInitialData = async () => {
       try {
-        const [itemsResponse, customersResponse, shopsResponse] =
-          await Promise.all([
-            axios.get('/api/items'),
-            axios.get('/api/customers'),
-            axios.get('/api/shop'),
-          ]);
+        const user = localStorage.getItem('user');
+        const shop = JSON.parse(user!)['workAt'];
+        const [itemsResponse, customersResponse] = await Promise.all([
+          axios.get(`/api/shop/items/?shopId=${shop}`),
+          axios.get('/api/customers'),
+        ]);
         setItems(itemsResponse.data.items);
         setCustomers(customersResponse.data.customers);
-        setShops(shopsResponse.data.shops);
         setLoading(false);
       } catch (error) {
         setError('Failed to fetch initial data');
@@ -69,7 +67,6 @@ const Page = () => {
       <SaleForm
         items={items}
         customers={customers}
-        shops={shops}
         onCreateSale={handleCreateSale}
       />
     </div>

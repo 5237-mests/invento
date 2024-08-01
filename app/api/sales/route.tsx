@@ -4,6 +4,7 @@ import SoldItem from '@/models/soldItemModel';
 import Item from '@/models/itemModel';
 import Shop from '@/models/shopModel';
 import { NextResponse } from 'next/server';
+import axios from 'axios';
 
 // connect to db
 connectDB();
@@ -66,6 +67,35 @@ export async function POST(req: Request) {
         await soldItem.save();
       }),
     );
+
+    // Update the Shop with the sale ID
+    // deduct items from shop items
+    const deductItemFromShop = async (
+      item: string,
+      shop: string,
+      quantity: number,
+    ) => {
+      try {
+        const baseUrl =
+          process.env.NODE_ENV === 'development'
+            ? process.env.BASE_URL_LOCAL
+            : process.env.BASE_URL_LIVE;
+        const res = await axios.post(`${baseUrl}/api/shop/items`, {
+          itemId: item,
+          shopId: shop,
+          quantity: -quantity,
+        });
+        return res.data;
+      } catch (error) {
+        console.error('Error deducting item from store:', error);
+        throw error;
+      }
+    };
+
+    const itemsInShop = items.map((item) =>
+      deductItemFromShop(item.itemId, shopId, item.quantity),
+    );
+    await Promise.all(itemsInShop);
 
     return NextResponse.json(
       { message: 'Sale created successfully.' },

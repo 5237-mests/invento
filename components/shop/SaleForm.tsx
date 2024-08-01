@@ -5,7 +5,6 @@ import Select from 'react-select';
 const SaleForm = ({
   items,
   customers,
-  shops,
   onCreateSale,
 }: {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -13,15 +12,12 @@ const SaleForm = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   customers: any[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  shops: any[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   onCreateSale: (formData: any) => void;
 }) => {
   const [selectedItems, setSelectedItems] = useState<
     { itemId: string; quantity: number }[]
   >([]);
   const [selectedCustomer, setSelectedCustomer] = useState<string>('');
-  const [selectedShop, setSelectedShop] = useState<string>('');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleItemChange = (selectedOption: any) => {
@@ -45,6 +41,8 @@ const SaleForm = ({
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
+    const user = localStorage.getItem('user');
+    const selectedShop = JSON.parse(user!)['workAt'];
     const formData = {
       items: selectedItems,
       customer: selectedCustomer,
@@ -55,8 +53,8 @@ const SaleForm = ({
 
   // Prepare options for react-select dropdown
   const itemOptions = items.map((item) => ({
-    value: item._id,
-    label: item.name, // Adjust based on how item names are stored
+    value: item.item._id,
+    label: item.item.name, // Adjust based on how item names are stored
   }));
 
   return (
@@ -81,24 +79,7 @@ const SaleForm = ({
           ))}
         </select>
       </div>
-      <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-700">Shop</label>
-        <select
-          value={selectedShop}
-          onChange={(e) => setSelectedShop(e.target.value)}
-          className="mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
-          required
-        >
-          <option value="" disabled>
-            Select shop...
-          </option>
-          {shops.map((shop) => (
-            <option key={shop._id} value={shop._id}>
-              {shop.name}
-            </option>
-          ))}
-        </select>
-      </div>
+
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700">Items</label>
         <Select
